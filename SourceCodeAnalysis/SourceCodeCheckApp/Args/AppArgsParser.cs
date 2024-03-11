@@ -13,7 +13,6 @@ namespace SourceCodeCheckApp.Args
                     return new AppArgs(AppUsageMode.Help);
                 case 1:
                 case 2:
-                case 3:
                     return ParseArgsImpl(args);
                 default:
                     return new AppArgs(AppUsageMode.BadAppUsage);
@@ -39,15 +38,6 @@ namespace SourceCodeCheckApp.Args
                         return new AppArgs(AppUsageMode.BadSource);
                     appArgs.Source = source;
                 }
-                else if (arg.StartsWith(ConfigOption))
-                {
-                    if (!parsedOptions.Add(ConfigOption))
-                        return new AppArgs(AppUsageMode.BadConfig);
-                    String config = EnvironmentVariableHelper.ExpandEnvironmentVariables(arg.Substring(ConfigOption.Length));
-                    if (String.IsNullOrEmpty(config))
-                        return new AppArgs(AppUsageMode.BadConfig);
-                    appArgs.Config = config;
-                }
                 else if (arg.StartsWith(OutputLevelOption))
                 {
                     if (!parsedOptions.Add(OutputLevelOption))
@@ -65,7 +55,6 @@ namespace SourceCodeCheckApp.Args
         private const String HelpOption = "--help";
         private const String VersionOption = "--version";
         private const String SourceOption = "--source=";
-        private const String ConfigOption = "--config=";
         private const String OutputLevelOption = "--output-level=";
     }
 }

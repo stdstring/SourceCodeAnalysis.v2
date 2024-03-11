@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using SourceCodeCheckApp.Analyzers;
-using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 using SourceCodeCheckApp.Utils;
 
@@ -9,12 +8,11 @@ namespace SourceCodeCheckApp.Processors
 {
     internal class FileProcessor : ISourceProcessor
     {
-        public FileProcessor(String filename, IConfig externalConfig, OutputImpl output)
+        public FileProcessor(String filename, OutputImpl output)
         {
             if (String.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
             _filename = filename;
-            _externalConfig = externalConfig;
             _output = output;
             _processorHelper = new FileProcessorHelper();
         }
@@ -33,7 +31,7 @@ namespace SourceCodeCheckApp.Processors
             if (!CompilationChecker.CheckCompilationErrors(_filename, compilation, _output))
                 return false;
             SemanticModel model = compilation.GetSemanticModel(tree);
-            Boolean result = _processorHelper.Process(_filename, tree, model, analyzers, _externalConfig.LoadDefault());
+            Boolean result = _processorHelper.Process(_filename, tree, model, analyzers);
             _output.WriteInfoLine($"Processing of the file {_filename} is finished");
             return result;
         }
@@ -51,7 +49,6 @@ namespace SourceCodeCheckApp.Processors
         }
 
         private readonly String _filename;
-        private readonly IConfig _externalConfig;
         private readonly OutputImpl _output;
         private readonly FileProcessorHelper _processorHelper;
     }

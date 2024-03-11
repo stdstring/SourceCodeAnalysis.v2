@@ -6,8 +6,7 @@
         Analysis = 1,
         Help = 2,
         Version = 3,
-        BadSource = 253,
-        BadConfig = 254,
+        BadSource = 254,
         BadAppUsage = 255
     }
 }

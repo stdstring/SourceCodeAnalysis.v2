@@ -1,20 +1,19 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using SourceCodeCheckApp.Analyzers;
-using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Processors
 {
     internal class SolutionProcessor : ISourceProcessor
     {
-        public SolutionProcessor(String solutionFilename, IConfig externalConfig, OutputImpl output)
+        public SolutionProcessor(String solutionFilename, OutputImpl output)
         {
             if (String.IsNullOrEmpty(solutionFilename))
                 throw new ArgumentNullException(nameof(solutionFilename));
             _solutionFilename = solutionFilename;
             _output = output;
-            _processorHelper = new ProjectProcessorHelper(externalConfig, output);
+            _processorHelper = new ProjectProcessorHelper(output);
         }
 
         public Boolean Process(IList<IFileAnalyzer> analyzers)
@@ -45,12 +44,12 @@ namespace SourceCodeCheckApp.Processors
             return result;
         }
 
-        private Boolean Process(Document file, Compilation compilation, ConfigData externalData, IList<IFileAnalyzer> analyzers)
+        private Boolean Process(Document file, Compilation compilation, IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the file {file.FilePath} is started");
             SyntaxTree tree = file.GetSyntaxTreeAsync().Result;
             SemanticModel model = compilation.GetSemanticModel(tree);
-            Boolean result = _processorHelper.ProcessFile(file.FilePath, tree, model, externalData, analyzers);
+            Boolean result = _processorHelper.ProcessFile(file.FilePath, tree, model, analyzers);
             _output.WriteInfoLine($"Processing of the file {file.FilePath} is finished");
             return result;
         }

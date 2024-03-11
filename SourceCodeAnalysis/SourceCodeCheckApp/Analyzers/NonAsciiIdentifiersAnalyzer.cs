@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 using SourceCodeCheckApp.Utils;
 
@@ -14,7 +13,7 @@ namespace SourceCodeCheckApp.Analyzers
             _output = output;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model, ConfigData externalData)
+        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
         {
             _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer started");
             Regex identifierRegex = new Regex("^[a-zA-Z0-9_]+$");
