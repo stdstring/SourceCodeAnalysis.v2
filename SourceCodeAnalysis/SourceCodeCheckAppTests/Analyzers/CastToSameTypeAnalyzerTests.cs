@@ -25,8 +25,8 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "    }\r\n" +
                                   "}";
             const String filePath = "C:\\SomeFolder\\SomeClass.cs";
-            const String expectedOutputTemplate = "{0}(8): [ERROR]: Found cast to the same type \"string\"\r\n" +
-                                                  "{0}(9): [ERROR]: Found cast to the same type \"string\"\r\n";
+            const String expectedOutputTemplate = "{0}(8): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{0}(9): [ERROR]: Found cast to the same type \"System.String\"\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, filePath);
             AnalyzerHelper.Process(_analyzerFactory, source, "CastToSameType", filePath, outputLevel, false, expectedOutput);
         }
@@ -49,8 +49,8 @@ namespace SourceCodeCheckAppTests.Analyzers
             const String filePath = "C:\\SomeFolder\\SomeClass.cs";
             const String expectedOutputTemplate = "Execution of CastToSameTypeAnalyzer started\r\n" +
                                                   "Found 2 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{0}(8): [ERROR]: Found cast to the same type \"string\"\r\n" +
-                                                  "{0}(9): [ERROR]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}(8): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{0}(9): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
                                                   "Found 0 casts to the same type not leading to errors in the ported C++ code\r\n" +
                                                   "Execution of CastToSameTypeAnalyzer finished\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, filePath);
@@ -116,10 +116,10 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "    }\r\n" +
                                   "}\r\n";
             const String filePath = "C:\\SomeFolder\\SomeClass.cs";
-            const String expectedOutputTemplate = "{0}(14): [WARNING]: Found cast to the same type \"int\"\r\n" +
-                                                  "{0}(15): [WARNING]: Found cast to the same type \"int\"\r\n" +
-                                                  "{0}(17): [WARNING]: Found cast to the same type \"double\"\r\n" +
-                                                  "{0}(19): [WARNING]: Found cast to the same type \"object\"\r\n" +
+            const String expectedOutputTemplate = "{0}(14): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}(15): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}(17): [WARNING]: Found cast to the same type \"System.Double\"\r\n" +
+                                                  "{0}(19): [WARNING]: Found cast to the same type \"System.Object\"\r\n" +
                                                   "{0}(21): [WARNING]: Found cast to the same type \"SomeNamespace.SomeDerivedClass\"\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, filePath);
             AnalyzerHelper.Process(_analyzerFactory, source, "CastToSameType", filePath, OutputLevel.Warning, true, expectedOutput);
@@ -156,10 +156,10 @@ namespace SourceCodeCheckAppTests.Analyzers
             const String expectedOutputTemplate = "Execution of CastToSameTypeAnalyzer started\r\n" +
                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                   "Found 5 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{0}(14): [WARNING]: Found cast to the same type \"int\"\r\n" +
-                                                  "{0}(15): [WARNING]: Found cast to the same type \"int\"\r\n" +
-                                                  "{0}(17): [WARNING]: Found cast to the same type \"double\"\r\n" +
-                                                  "{0}(19): [WARNING]: Found cast to the same type \"object\"\r\n" +
+                                                  "{0}(14): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}(15): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}(17): [WARNING]: Found cast to the same type \"System.Double\"\r\n" +
+                                                  "{0}(19): [WARNING]: Found cast to the same type \"System.Object\"\r\n" +
                                                   "{0}(21): [WARNING]: Found cast to the same type \"SomeNamespace.SomeDerivedClass\"\r\n" +
                                                   "Execution of CastToSameTypeAnalyzer finished\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, filePath);

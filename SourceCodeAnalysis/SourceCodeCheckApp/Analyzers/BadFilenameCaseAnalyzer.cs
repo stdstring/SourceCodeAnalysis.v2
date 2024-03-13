@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
@@ -23,15 +22,15 @@ namespace SourceCodeCheckApp.Analyzers
             return result;
         }
 
-        private Boolean Process(String filePath, IList<CollectedData<String>> data)
+        private Boolean Process(String filePath, IList<AnalyzerData<TypeData>> data)
         {
             String filename = Path.GetFileName(filePath);
             String expectedTypeName = Path.GetFileNameWithoutExtension(filePath);
-            IList<CollectedData<String>> typeWrongNameCaseList = new List<CollectedData<String>>();
+            IList<AnalyzerData<TypeData>> typeWrongNameCaseList = new List<AnalyzerData<TypeData>>();
             Boolean exactMatch = false;
-            foreach (CollectedData<String> item in data)
+            foreach (AnalyzerData<TypeData> item in data)
             {
-                String actualTypeName = item.Data.Split('.').Last();
+                String actualTypeName = item.Data.TypeName;
                 if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCulture))
                     exactMatch = true;
                 else if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCultureIgnoreCase))
@@ -45,13 +44,13 @@ namespace SourceCodeCheckApp.Analyzers
             if (!exactMatch && typeWrongNameCaseList.Count > 0)
             {
                 _output.WriteInfoLine($"File doesn't contain any type with name exact match to the filename, but contains {typeWrongNameCaseList.Count} types with names match to the filename with ignoring case");
-                foreach (CollectedData<String> typeWrongNameCase in typeWrongNameCaseList)
-                    _output.WriteErrorLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data}\" which corresponds the filename \"{filename}\" only at ignoring case");
+                foreach (AnalyzerData<TypeData> typeWrongNameCase in typeWrongNameCaseList)
+                    _output.WriteErrorLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data.FullName}\" which corresponds the filename \"{filename}\" only at ignoring case");
                 return false;
             }
             _output.WriteInfoLine($"File contains {typeWrongNameCaseList.Count} types with names match to the filename with ignoring case");
-            foreach (CollectedData<String> typeWrongNameCase in typeWrongNameCaseList)
-                _output.WriteWarningLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data}\" which corresponds the filename \"{filename}\" only at ignoring case");
+            foreach (AnalyzerData<TypeData> typeWrongNameCase in typeWrongNameCaseList)
+                _output.WriteWarningLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data.FullName}\" which corresponds the filename \"{filename}\" only at ignoring case");
             return true;
         }
 
@@ -62,41 +61,38 @@ namespace SourceCodeCheckApp.Analyzers
             public TopLevelTypeNamesCollector(SemanticModel model)
             {
                 _model = model;
-                Data = new List<CollectedData<String>>();
             }
 
             public override void VisitClassDeclaration(ClassDeclarationSyntax node)
             {
                 VisitTypeDeclarationImpl(node, _model.GetDeclaredSymbol(node));
-                base.VisitClassDeclaration(node);
             }
 
             public override void VisitStructDeclaration(StructDeclarationSyntax node)
             {
                 VisitTypeDeclarationImpl(node, _model.GetDeclaredSymbol(node));
-                base.VisitStructDeclaration(node);
             }
 
             public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
             {
                 VisitTypeDeclarationImpl(node, _model.GetDeclaredSymbol(node));
-                base.VisitInterfaceDeclaration(node);
             }
 
             public override void VisitDelegateDeclaration(DelegateDeclarationSyntax node)
             {
                 VisitTypeDeclarationImpl(node, _model.GetDeclaredSymbol(node));
-                base.VisitDelegateDeclaration(node);
             }
 
-            private void VisitTypeDeclarationImpl(MemberDeclarationSyntax node, INamedTypeSymbol type)
+            private void VisitTypeDeclarationImpl(MemberDeclarationSyntax node, INamedTypeSymbol? type)
             {
+                if (type == null)
+                    throw new InvalidOperationException();
                 FileLinePositionSpan span = node.SyntaxTree.GetLineSpan(node.Span);
                 if (type.ContainingType == null)
-                    Data.Add(new CollectedData<String>(type.ToDisplayString(), span.StartLinePosition, span.EndLinePosition));
+                    Data.Add(new AnalyzerData<TypeData>(new TypeData(type), span));
             }
 
-            public IList<CollectedData<String>> Data { get; }
+            public IList<AnalyzerData<TypeData>> Data { get; } = new List<AnalyzerData<TypeData>>();
 
             private readonly SemanticModel _model;
         }

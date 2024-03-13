@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
@@ -24,10 +23,10 @@ namespace SourceCodeCheckApp.Analyzers
             return !hasErrors;
         }
 
-        private Boolean ProcessErrors(String filePath, IList<CollectedData<String>> errors)
+        private Boolean ProcessErrors(String filePath, IList<AnalyzerData<String>> errors)
         {
             _output.WriteInfoLine($"Found {errors.Count} non-ASCII identifiers leading to errors in the ported C++ code");
-            foreach (CollectedData<String> error in errors)
+            foreach (AnalyzerData<String> error in errors)
                 _output.WriteErrorLine(filePath, error.StartPosition.Line, $"Found non-ASCII identifier \"{error.Data}\"");
             return errors.Count > 0;
         }
@@ -38,19 +37,20 @@ namespace SourceCodeCheckApp.Analyzers
         {
             public NonConsistentIdentifiersDetector(Regex identifierRegex) : base(SyntaxWalkerDepth.Token)
             {
-                Data = new List<CollectedData<String>>();
                 _identifierRegex = identifierRegex;
             }
 
             public override void VisitToken(SyntaxToken token)
             {
-                FileLinePositionSpan span = token.SyntaxTree.GetLineSpan(token.Span);
-                if (token.Kind() == SyntaxKind.IdentifierToken && !_identifierRegex.IsMatch(token.ValueText))
-                    Data.Add(new CollectedData<String>(token.ValueText, span.StartLinePosition, span.EndLinePosition));
-                base.VisitToken(token);
+                SyntaxTree? syntaxTree = token.SyntaxTree;
+                if (syntaxTree == null)
+                    throw new InvalidOperationException();
+                FileLinePositionSpan span = syntaxTree.GetLineSpan(token.Span);
+                if (token.IsKind(SyntaxKind.IdentifierToken) && !_identifierRegex.IsMatch(token.ValueText))
+                    Data.Add(new AnalyzerData<String>(token.ValueText, span));
             }
 
-            public IList<CollectedData<String>> Data { get; }
+            public IList<AnalyzerData<String>> Data { get; } = new List<AnalyzerData<String>>();
 
             private readonly Regex _identifierRegex;
         }
