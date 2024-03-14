@@ -21,35 +21,33 @@ namespace SourceCodeCheckApp.Args
 
         private static AppArgs ParseArgsImpl(String[] args)
         {
-            if (args.Length == 1 && String.Equals(args[0], HelpOption))
-                return new AppArgs(AppUsageMode.Help);
-            if (args.Length == 1 && String.Equals(args[0], VersionOption))
-                return new AppArgs(AppUsageMode.Version);
-            ISet<String> parsedOptions = new HashSet<String>();
-            AppArgs appArgs = new AppArgs(AppUsageMode.Analysis);
-            foreach (String arg in args)
+            switch (args)
             {
-                if (arg.StartsWith(SourceOption))
-                {
-                    if (!parsedOptions.Add(SourceOption))
-                        return new AppArgs(AppUsageMode.BadSource);
-                    String source = EnvironmentVariableHelper.ExpandEnvironmentVariables(arg.Substring(SourceOption.Length));
-                    if (String.IsNullOrEmpty(source))
-                        return new AppArgs(AppUsageMode.BadSource);
-                    appArgs.Source = source;
-                }
-                else if (arg.StartsWith(OutputLevelOption))
-                {
-                    if (!parsedOptions.Add(OutputLevelOption))
-                        return new AppArgs(AppUsageMode.BadAppUsage);
-                    if (!Enum.TryParse(arg.Substring(OutputLevelOption.Length), out OutputLevel outputLevel))
-                        return new AppArgs(AppUsageMode.BadAppUsage);
-                    appArgs.OutputLevel = outputLevel;
-                }
-                else
+                case []:
+                case [HelpOption]:
+                    return new AppArgs(AppUsageMode.Help);
+                case [VersionOption]:
+                    return new AppArgs(AppUsageMode.Version);
+                case [var arg0, var arg1] when arg0.StartsWith(SourceOption) && arg1.StartsWith(OutputLevelOption):
+                    return ParseAnalysisArgs(arg0.Substring(SourceOption.Length), arg1.Substring(OutputLevelOption.Length));
+                case [var arg0, var arg1] when arg0.StartsWith(OutputLevelOption) && arg1.StartsWith(SourceOption):
+                    return ParseAnalysisArgs(arg1.Substring(SourceOption.Length), arg0.Substring(OutputLevelOption.Length));
+                default:
                     return new AppArgs(AppUsageMode.BadAppUsage);
             }
-            return String.IsNullOrEmpty(appArgs.Source) ? new AppArgs(AppUsageMode.BadAppUsage) : appArgs;
+        }
+
+        private static AppArgs ParseAnalysisArgs(String sourceValue, String outputLevelValue)
+        {
+            AppArgs appArgs = new AppArgs(AppUsageMode.Analysis);
+            String source = EnvironmentVariableHelper.ExpandEnvironmentVariables(sourceValue);
+            if (String.IsNullOrEmpty(source))
+                return new AppArgs(AppUsageMode.BadSource);
+            appArgs.Source = source;
+            if (!Enum.TryParse(outputLevelValue, out OutputLevel outputLevel))
+                return new AppArgs(AppUsageMode.BadAppUsage);
+            appArgs.OutputLevel = outputLevel;
+            return appArgs;
         }
 
         private const String HelpOption = "--help";

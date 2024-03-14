@@ -12,9 +12,10 @@ namespace SourceCodeCheckApp.Processors
         {
             if (String.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
+            if (!File.Exists(_filename))
+                throw new ArgumentException($"Bad (unknown) target {_filename}");
             _filename = filename;
             _output = output;
-            _processorHelper = new FileProcessorHelper();
         }
 
         public Boolean Process(IList<IFileAnalyzer> analyzers)
@@ -31,8 +32,16 @@ namespace SourceCodeCheckApp.Processors
             if (!CompilationChecker.CheckCompilationErrors(_filename, compilation, _output))
                 return false;
             SemanticModel model = compilation.GetSemanticModel(tree);
-            Boolean result = _processorHelper.Process(_filename, tree, model, analyzers);
+            Boolean result = Process(tree, model, analyzers);
             _output.WriteInfoLine($"Processing of the file {_filename} is finished");
+            return result;
+        }
+
+        public Boolean Process(SyntaxTree tree, SemanticModel model, IList<IFileAnalyzer> analyzers)
+        {
+            Boolean result = true;
+            foreach (IFileAnalyzer analyzer in analyzers)
+                result &= analyzer.Process(_filename, tree, model);
             return result;
         }
 
@@ -50,6 +59,5 @@ namespace SourceCodeCheckApp.Processors
 
         private readonly String _filename;
         private readonly OutputImpl _output;
-        private readonly FileProcessorHelper _processorHelper;
     }
 }

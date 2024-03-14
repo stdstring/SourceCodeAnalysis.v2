@@ -13,7 +13,6 @@ namespace SourceCodeCheckApp.Processors
                 throw new ArgumentNullException(nameof(solutionFilename));
             _solutionFilename = solutionFilename;
             _output = output;
-            _processorHelper = new ProjectProcessorHelper(output);
         }
 
         public Boolean Process(IList<IFileAnalyzer> analyzers)
@@ -29,7 +28,9 @@ namespace SourceCodeCheckApp.Processors
             Boolean result = true;
             foreach (ProjectId projectId in solution.GetProjectDependencyGraph().GetTopologicallySortedProjects())
             {
-                Project project = solution.GetProject(projectId);
+                Project? project = solution.GetProject(projectId);
+                if (project == null)
+                    throw new InvalidOperationException();
                 result &= Process(project, analyzers);
             }
             _output.WriteInfoLine($"Processing of the solution {_solutionFilename} is finished");
@@ -39,23 +40,13 @@ namespace SourceCodeCheckApp.Processors
         private Boolean Process(Project project, IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the project {project.FilePath} is started");
-            Boolean result = _processorHelper.ProcessProject(project, analyzers, Process);
+            ProjectProcessor projectProcessor = new ProjectProcessor(project.FilePath, _output);
+            Boolean result = projectProcessor.Process(project, analyzers);
             _output.WriteInfoLine($"Processing of the project {project.FilePath} is finished");
-            return result;
-        }
-
-        private Boolean Process(Document file, Compilation compilation, IList<IFileAnalyzer> analyzers)
-        {
-            _output.WriteInfoLine($"Processing of the file {file.FilePath} is started");
-            SyntaxTree tree = file.GetSyntaxTreeAsync().Result;
-            SemanticModel model = compilation.GetSemanticModel(tree);
-            Boolean result = _processorHelper.ProcessFile(file.FilePath, tree, model, analyzers);
-            _output.WriteInfoLine($"Processing of the file {file.FilePath} is finished");
             return result;
         }
 
         private readonly String _solutionFilename;
         private readonly OutputImpl _output;
-        private readonly ProjectProcessorHelper _processorHelper;
     }
 }
