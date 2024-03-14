@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Locator;
-using SourceCodeCheckApp.Output;
+﻿using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Processors
 {
@@ -14,7 +13,6 @@ namespace SourceCodeCheckApp.Processors
             String sourceExtension = Path.GetExtension(source);
             if (String.IsNullOrEmpty(sourceExtension) || !ProcessorsMap.ContainsKey(sourceExtension))
                 throw new ArgumentException(nameof(source));
-            MSBuildLocator.RegisterDefaults();
             return ProcessorsMap[sourceExtension](source, output);
         }
 

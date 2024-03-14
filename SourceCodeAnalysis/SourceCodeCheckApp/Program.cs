@@ -3,6 +3,7 @@ using SourceCodeCheckApp.Analyzers;
 using SourceCodeCheckApp.Args;
 using SourceCodeCheckApp.Output;
 using SourceCodeCheckApp.Processors;
+using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp
 {
@@ -36,6 +37,7 @@ namespace SourceCodeCheckApp
                 case AppUsageMode.Analysis:
                     Console.OutputEncoding = Encoding.UTF8;
                     OutputImpl output = new OutputImpl(Console.Out, Console.Error, appArgs.OutputLevel);
+                    PrerequisitesManager.Run();
                     ISourceProcessor processor = SourceProcessorFactory.Create(appArgs.Source, output);
                     IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(output);
                     Boolean processResult = processor.Process(analyzers);
