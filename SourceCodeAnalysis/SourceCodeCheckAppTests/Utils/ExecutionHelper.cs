@@ -7,16 +7,16 @@ namespace SourceCodeCheckAppTests.Utils
 {
     internal static class ExecutionHelper
     {
-        public static ExecutionResult Execute(String target, String config, OutputLevel outputLevel)
+        public static ExecutionResult Execute(String target, OutputLevel outputLevel)
         {
-            return Execute(target, config, outputLevel, new Dictionary<String, String>());
+            return Execute(target, outputLevel, new Dictionary<String, String>());
         }
 
-        public static ExecutionResult Execute(String target, String config, OutputLevel outputLevel, IDictionary<String, String> environmentVariables)
+        public static ExecutionResult Execute(String target, OutputLevel outputLevel, IDictionary<String, String> environmentVariables)
         {
             if (String.IsNullOrEmpty(target))
                 throw new ArgumentNullException(nameof(target));
-            String arguments = CreateArgList(target, config, outputLevel);
+            String arguments = CreateArgList(target, outputLevel);
             return Execute(arguments, environmentVariables);
         }
 
@@ -43,8 +43,16 @@ namespace SourceCodeCheckAppTests.Utils
                     utilProcess.StartInfo.Environment.Add(environmentVariable.Key, environmentVariable.Value);
                 IList<String> output = new List<String>();
                 IList<String> error = new List<String>();
-                utilProcess.OutputDataReceived += (sender, e) => { output.Add(e.Data); };
-                utilProcess.ErrorDataReceived += (sender, e) => { error.Add(e.Data); };
+                utilProcess.OutputDataReceived += (_, e) =>
+                {
+                    if (e.Data != null)
+                        output.Add(e.Data);
+                };
+                utilProcess.ErrorDataReceived += (_, e) =>
+                {
+                    if (e.Data != null)
+                        error.Add(e.Data);
+                };
                 utilProcess.Start();
                 utilProcess.BeginErrorReadLine();
                 utilProcess.BeginOutputReadLine();
@@ -53,12 +61,10 @@ namespace SourceCodeCheckAppTests.Utils
             }
         }
 
-        private static String CreateArgList(String target, String config, OutputLevel outputLevel)
+        private static String CreateArgList(String target, OutputLevel outputLevel)
         {
             StringBuilder dest = new StringBuilder();
             dest.AppendFormat("--source=\"{0}\"", target);
-            if (!String.IsNullOrEmpty(config))
-                dest.AppendFormat(" --config=\"{0}\"", config);
             dest.AppendFormat(" --output-level={0}", outputLevel);
             return dest.ToString();
         }

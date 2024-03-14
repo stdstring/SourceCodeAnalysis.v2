@@ -17,9 +17,9 @@ namespace SourceCodeCheckAppTests.Utils
                 IFileAnalyzer analyzer = analyzerFactory(output);
                 Boolean actualResult = analyzer.Process(filePath, model.SyntaxTree, model);
                 Assert.That(actualResult, Is.EqualTo(expectedResult));
-                String actualOutput = outputWriter.ToString();
+                String actualOutput = outputWriter.ToString() ?? "";
                 Assert.That(actualOutput, Is.EqualTo(expectedOutput));
-                String actualError = errorWriter.ToString();
+                String actualError = errorWriter.ToString() ?? "";
                 Assert.That(actualError, Is.Empty);
             }
         }
