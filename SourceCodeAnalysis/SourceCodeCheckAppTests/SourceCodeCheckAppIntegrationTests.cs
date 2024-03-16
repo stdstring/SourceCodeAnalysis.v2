@@ -66,6 +66,13 @@ namespace SourceCodeCheckAppTests
         }
 
         [Test]
+        public void ProcessDefaultOutputLevel()
+        {
+            ExecutionResult executionResult = ExecutionHelper.Execute("--source=\"..\\..\\..\\..\\Examples\\TestSolution\\EmptyExample\\EmptyExample.csproj\"");
+            ExecutionChecker.Check(executionResult, 0, "", "");
+        }
+
+        [Test]
         public void ProcessGoodExampleProjectError()
         {
             ExecutionResult executionResult = ExecutionHelper.Execute("..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj", OutputLevel.Error);

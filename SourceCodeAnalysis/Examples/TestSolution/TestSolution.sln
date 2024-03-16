@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomeBaseLibrary", "SomeBaseLibrary\SomeBaseLibrary.csproj", "{040E3814-FFD4-49E5-BA8C-3584B016423A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SomeBaseLibrary", "SomeBaseLibrary\SomeBaseLibrary.csproj", "{040E3814-FFD4-49E5-BA8C-3584B016423A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodExample", "GoodExample\GoodExample.csproj", "{F8FC0E69-A6B6-45B5-BAA0-C9282E830199}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodExample", "GoodExample\GoodExample.csproj", "{F8FC0E69-A6B6-45B5-BAA0-C9282E830199}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadExample", "BadExample\BadExample.csproj", "{49C5CDA0-BABB-492A-945B-3B2642DBED87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadExample", "BadExample\BadExample.csproj", "{49C5CDA0-BABB-492A-945B-3B2642DBED87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyExample", "EmptyExample\EmptyExample.csproj", "{083779B3-02D2-497D-AAB2-7E03A11A86D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{49C5CDA0-BABB-492A-945B-3B2642DBED87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49C5CDA0-BABB-492A-945B-3B2642DBED87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49C5CDA0-BABB-492A-945B-3B2642DBED87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083779B3-02D2-497D-AAB2-7E03A11A86D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083779B3-02D2-497D-AAB2-7E03A11A86D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083779B3-02D2-497D-AAB2-7E03A11A86D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083779B3-02D2-497D-AAB2-7E03A11A86D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

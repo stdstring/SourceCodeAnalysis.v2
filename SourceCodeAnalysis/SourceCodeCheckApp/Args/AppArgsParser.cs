@@ -28,6 +28,8 @@ namespace SourceCodeCheckApp.Args
                     return new AppArgs(AppUsageMode.Help);
                 case [VersionOption]:
                     return new AppArgs(AppUsageMode.Version);
+                case [var arg0] when arg0.StartsWith(SourceOption):
+                    return ParseAnalysisArgs(arg0.Substring(SourceOption.Length), "Error");
                 case [var arg0, var arg1] when arg0.StartsWith(SourceOption) && arg1.StartsWith(OutputLevelOption):
                     return ParseAnalysisArgs(arg0.Substring(SourceOption.Length), arg1.Substring(OutputLevelOption.Length));
                 case [var arg0, var arg1] when arg0.StartsWith(OutputLevelOption) && arg1.StartsWith(SourceOption):
