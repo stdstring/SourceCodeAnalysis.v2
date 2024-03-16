@@ -1,0 +1,5 @@
+*.user
+SourceCodeAnalysis/**/.vs/*
+SourceCodeAnalysis/**/bin/*
+SourceCodeAnalysis/**/obj/*
+SourceCodeAnalysis/**/Properties/*
