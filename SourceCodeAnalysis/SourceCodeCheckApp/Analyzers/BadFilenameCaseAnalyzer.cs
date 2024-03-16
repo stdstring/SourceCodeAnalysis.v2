@@ -56,7 +56,7 @@ namespace SourceCodeCheckApp.Analyzers
 
         private readonly OutputImpl _output;
 
-        internal class TopLevelTypeNamesCollector : CSharpSyntaxWalker
+        private class TopLevelTypeNamesCollector : CSharpSyntaxWalker
         {
             public TopLevelTypeNamesCollector(SemanticModel model)
             {

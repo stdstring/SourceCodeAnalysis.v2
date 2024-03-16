@@ -12,7 +12,7 @@ namespace SourceCodeCheckApp.Processors
         {
             if (String.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
-            if (!File.Exists(_filename))
+            if (!File.Exists(filename))
                 throw new ArgumentException($"Bad (unknown) target {_filename}");
             _filename = filename;
             _output = output;
@@ -21,11 +21,6 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the file {_filename} is started");
-            if (!File.Exists(_filename))
-            {
-                _output.WriteFailLine($"Bad (unknown) target {_filename}");
-                return false;
-            }
             String source = File.ReadAllText(_filename);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(source);
             Compilation compilation = CreateCompilation(tree);

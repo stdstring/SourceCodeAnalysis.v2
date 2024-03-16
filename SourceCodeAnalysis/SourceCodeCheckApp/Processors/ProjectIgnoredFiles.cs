@@ -7,10 +7,12 @@
             return KnownIgnoredFilesSuffix.Any(filename.EndsWith);
         }
 
+        // TODO (std_string) : think about another approach (via config)
         private static readonly String[] KnownIgnoredFilesSuffix =
         {
-            "Properties\\AssemblyInfo.cs",
-            ".AssemblyAttributes.cs"
+            ".AssemblyInfo.cs",
+            ".AssemblyAttributes.cs",
+            ".GlobalUsings.g.cs"
         };
     }
 }

@@ -18,7 +18,7 @@ namespace SourceCodeCheckApp
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine(e);
+                Console.Error.WriteLine($"[ERROR]: {e.Message}");
                 return -1;
             }
         }
