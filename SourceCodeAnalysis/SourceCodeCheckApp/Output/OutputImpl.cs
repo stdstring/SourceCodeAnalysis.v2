@@ -1,4 +1,6 @@
-﻿namespace SourceCodeCheckApp.Output
+﻿using SourceCodeCheckApp.Config;
+
+namespace SourceCodeCheckApp.Output
 {
     // TODO (std_string) : think about using of logger - alternate approach
     // TODO (std_string) : think about name

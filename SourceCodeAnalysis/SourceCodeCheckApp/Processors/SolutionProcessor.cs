@@ -11,7 +11,7 @@ namespace SourceCodeCheckApp.Processors
         {
             if (String.IsNullOrEmpty(solutionFilename))
                 throw new ArgumentNullException(nameof(solutionFilename));
-            _solutionFilename = solutionFilename;
+            _solutionFilename = Path.GetFullPath(solutionFilename);
             _output = output;
         }
 

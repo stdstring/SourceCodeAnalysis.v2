@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using SourceCodeCheckApp.Output;
 using SourceCodeCheckAppTests.Utils;
 
 namespace SourceCodeCheckAppTests
@@ -29,53 +28,31 @@ namespace SourceCodeCheckAppTests
         }
 
         [TestCase("--some-strange-option")]
-        [TestCase("--source=\"..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj\" --some-strange-option")]
+        [TestCase("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\GoodExampleErrorDefault.xml\" --some-strange-option")]
         public void ProcessUnknownArg(String args)
         {
             ExecutionResult executionResult = ExecutionHelper.Execute(args);
-            ExecutionChecker.Check(executionResult, -1, SourceCodeCheckAppOutputDef.AppDescription, SourceCodeCheckAppOutputDef.BadUsageMessage);
+            ExecutionChecker.Check(executionResult, -1, SourceCodeCheckAppOutputDef.AppDescription, SourceCodeCheckAppOutputDef.BadArgsMessage);
         }
 
         [Test]
-        public void ProcessSourceWithoutValue()
+        public void ProcessConfigWithoutValue()
         {
-            ExecutionResult executionResult = ExecutionHelper.Execute("--source= --output-level=Error");
-            ExecutionChecker.Check(executionResult, -1, "", SourceCodeCheckAppOutputDef.BadSourceMessage);
-        }
-
-        [TestCase(OutputLevel.Error)]
-        [TestCase(OutputLevel.Warning)]
-        public void ProcessUnknownSource(OutputLevel outputLevel)
-        {
-            ExecutionResult executionResult = ExecutionHelper.Execute("SomeUnknownExample.csproj", outputLevel);
-            ExecutionChecker.Check(executionResult, -1, "", "[ERROR]: Bad (unknown) target SomeUnknownExample.csproj");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=");
+            ExecutionChecker.Check(executionResult, -1, "", SourceCodeCheckAppOutputDef.BadConfigMessage);
         }
 
         [Test]
-        public void ProcessBadOutputLevel()
+        public void ProcessUnknownSource()
         {
-            ExecutionResult executionResult = ExecutionHelper.Execute("--source=\"..\\..\\..\\..\\Examples\\TestSolution\\TestSolution.sln\" --output-level=XXX");
-            ExecutionChecker.Check(executionResult, -1, SourceCodeCheckAppOutputDef.AppDescription, SourceCodeCheckAppOutputDef.BadUsageMessage);
-        }
-
-        [Test]
-        public void ProcessOutputLevelWithoutValue()
-        {
-            ExecutionResult executionResult = ExecutionHelper.Execute("--source=\"..\\..\\..\\..\\Examples\\TestSolution\\TestSolution.sln\" --output-level=");
-            ExecutionChecker.Check(executionResult, -1, SourceCodeCheckAppOutputDef.AppDescription, SourceCodeCheckAppOutputDef.BadUsageMessage);
-        }
-
-        [Test]
-        public void ProcessDefaultOutputLevel()
-        {
-            ExecutionResult executionResult = ExecutionHelper.Execute("--source=\"..\\..\\..\\..\\Examples\\TestSolution\\EmptyExample\\EmptyExample.csproj\"");
-            ExecutionChecker.Check(executionResult, 0, "", "");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\UnknownSourceErrorDefault.xml\"");
+            ExecutionChecker.Check(executionResult, -1, "", SourceCodeCheckAppOutputDef.UnknownSourceMessage);
         }
 
         [Test]
         public void ProcessGoodExampleProjectError()
         {
-            ExecutionResult executionResult = ExecutionHelper.Execute("..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj", OutputLevel.Error);
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\GoodExampleErrorDefault.xml\"");
             ExecutionChecker.Check(executionResult, 0, "", "");
         }
 
@@ -83,7 +60,7 @@ namespace SourceCodeCheckAppTests
         public void ProcessGoodExampleProjectWarning()
         {
             const String projectFilename = "..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj";
-            ExecutionResult executionResult = ExecutionHelper.Execute(projectFilename, OutputLevel.Warning);
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\GoodExampleWarningDefault.xml\"");
             String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
             const String expectedOutputTemplate = "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
                                                   "{0}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
@@ -95,8 +72,8 @@ namespace SourceCodeCheckAppTests
         [Test]
         public void ProcessGoodExampleProjectInfo()
         {
-            const String projectFilename = "..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj";
-            ExecutionResult executionResult = ExecutionHelper.Execute(projectFilename, OutputLevel.Info);
+            String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\GoodExampleInfoDefault.xml\"");
             String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.NugetRestoreOutput +
@@ -133,8 +110,8 @@ namespace SourceCodeCheckAppTests
         [Test]
         public void ProcessBadExampleProjectError()
         {
-            const String projectFilename = "..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj";
-            ExecutionResult executionResult = ExecutionHelper.Execute(projectFilename, OutputLevel.Error);
+            String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\BadExampleErrorDefault.xml\"");
             const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
                                                   "{0}\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
@@ -152,7 +129,7 @@ namespace SourceCodeCheckAppTests
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"локальноеДействие\"\r\n" +
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам1\"\r\n" +
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам2\"";
-            String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
+            String projectDir = Path.GetDirectoryName(projectFilename)!;
             String expectedOutput = String.Format(expectedOutputTemplate, projectDir);
             ExecutionChecker.Check(executionResult, -1, expectedOutput, "");
         }
@@ -160,8 +137,8 @@ namespace SourceCodeCheckAppTests
         [Test]
         public void ProcessBadExampleProjectWarning()
         {
-            const String projectFilename = "..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj";
-            ExecutionResult executionResult = ExecutionHelper.Execute(projectFilename, OutputLevel.Warning);
+            String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\BadExampleWarningDefault.xml\"");
             const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
                                                   "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
                                                   "{0}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
@@ -181,7 +158,7 @@ namespace SourceCodeCheckAppTests
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"локальноеДействие\"\r\n" +
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам1\"\r\n" +
                                                   "{0}\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам2\"";
-            String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
+            String projectDir = Path.GetDirectoryName(projectFilename)!;
             String expectedOutput = String.Format(expectedOutputTemplate, projectDir);
             ExecutionChecker.Check(executionResult, -1, expectedOutput, "");
         }
@@ -189,8 +166,8 @@ namespace SourceCodeCheckAppTests
         [Test]
         public void ProcessBadExampleProjectInfo()
         {
-            const String projectFilename = "..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj";
-            ExecutionResult executionResult = ExecutionHelper.Execute(projectFilename, OutputLevel.Info);
+            String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj");
+            ExecutionResult executionResult = ExecutionHelper.Execute("--config=\"..\\..\\..\\..\\Examples\\TestConfigs\\BadExampleInfoDefault.xml\"");
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.NugetRestoreOutput +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
@@ -237,7 +214,7 @@ namespace SourceCodeCheckAppTests
                                                   //"Processing of the file {1}\\IdentifiersExample.cs is finished\r\n" +
                                                   "Processing of the project {0} is finished\r\n" +
                                                   "Result of analysis: analysis is failed";
-            String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
+            String projectDir = Path.GetDirectoryName(projectFilename)!;
             String expectedOutput = String.Format(expectedOutputTemplate, projectFilename, projectDir);
             ExecutionChecker.Check(executionResult, -1, expectedOutput, "");
         }

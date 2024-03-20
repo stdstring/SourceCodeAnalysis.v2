@@ -1,0 +1,6 @@
+<Config>
+  <BaseConfig>
+    <Source>./SomeUnknownSource.csproj</Source>
+    <OutputLevel>Error</OutputLevel>
+  </BaseConfig>
+</Config>

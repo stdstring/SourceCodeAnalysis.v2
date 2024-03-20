@@ -15,7 +15,7 @@ namespace SourceCodeCheckApp.Processors
                 throw new ArgumentNullException(nameof(projectFilename));
             if (!File.Exists(projectFilename))
                 throw new ArgumentException($"Bad (unknown) target {projectFilename}");
-            _projectFilename = projectFilename;
+            _projectFilename = Path.GetFullPath(projectFilename);
             _output = output;
         }
 

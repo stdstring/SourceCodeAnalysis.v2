@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using SourceCodeCheckApp.Analyzers;
+using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckAppTests.Utils

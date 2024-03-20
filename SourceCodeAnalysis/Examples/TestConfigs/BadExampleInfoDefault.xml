@@ -1,0 +1,6 @@
+<Config>
+  <BaseConfig>
+    <Source>../../../../Examples/TestSolution/BadExample/BadExample.csproj</Source>
+    <OutputLevel>Info</OutputLevel>
+  </BaseConfig>
+</Config>

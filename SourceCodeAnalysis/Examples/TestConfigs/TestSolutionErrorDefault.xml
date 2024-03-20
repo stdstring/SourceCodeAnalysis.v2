@@ -1,0 +1,6 @@
+<Config>
+  <BaseConfig>
+    <Source>../../../../Examples/TestSolution/TestSolution.sln</Source>
+    <OutputLevel>Error</OutputLevel>
+  </BaseConfig>
+</Config>

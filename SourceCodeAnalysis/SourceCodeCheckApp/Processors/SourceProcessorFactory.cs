@@ -6,14 +6,16 @@ namespace SourceCodeCheckApp.Processors
     {
         public static ISourceProcessor Create(String source, OutputImpl output)
         {
-            if (String.IsNullOrEmpty(source))
-                throw new ArgumentNullException(nameof(source));
-            if (output == null)
-                throw new ArgumentNullException(nameof(output));
             String sourceExtension = Path.GetExtension(source);
             if (String.IsNullOrEmpty(sourceExtension) || !ProcessorsMap.ContainsKey(sourceExtension))
                 throw new ArgumentException(nameof(source));
             return ProcessorsMap[sourceExtension](source, output);
+        }
+
+        public static Boolean IsSupportedSource(String source)
+        {
+            String sourceExtension = Path.GetExtension(source);
+            return ProcessorsMap.ContainsKey(sourceExtension);
         }
 
         private static readonly IDictionary<String, Func<String, OutputImpl, ISourceProcessor>> ProcessorsMap = new Dictionary<String, Func<String, OutputImpl, ISourceProcessor>>
