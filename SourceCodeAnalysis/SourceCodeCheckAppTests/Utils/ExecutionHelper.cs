@@ -8,11 +8,6 @@ namespace SourceCodeCheckAppTests.Utils
     {
         public static ExecutionResult Execute(String arguments)
         {
-            return Execute(arguments, new Dictionary<String, String>());
-        }
-
-        public static ExecutionResult Execute(String arguments, IDictionary<String, String> environmentVariables)
-        {
             using (Process utilProcess = new Process())
             {
                 String currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
@@ -25,8 +20,6 @@ namespace SourceCodeCheckAppTests.Utils
                 utilProcess.StartInfo.StandardErrorEncoding = Encoding.UTF8;
                 utilProcess.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 utilProcess.StartInfo.WorkingDirectory = currentDir;
-                foreach (KeyValuePair<String, String> environmentVariable in environmentVariables)
-                    utilProcess.StartInfo.Environment.Add(environmentVariable.Key, environmentVariable.Value);
                 IList<String> output = new List<String>();
                 IList<String> error = new List<String>();
                 utilProcess.OutputDataReceived += (_, e) =>

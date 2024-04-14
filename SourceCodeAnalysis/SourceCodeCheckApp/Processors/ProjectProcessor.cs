@@ -22,6 +22,8 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the project {_projectFilename} is started");
+            if (DotnetHelper.Build(_projectFilename).ExitCode != 0)
+                throw new InvalidOperationException();
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Project project = workspace.OpenProjectAsync(_projectFilename).Result;
             Boolean result = Process(project, analyzers);
@@ -32,8 +34,6 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(Project project, IList<IFileAnalyzer> analyzers)
         {
             if (project.FilePath == null)
-                throw new InvalidOperationException();
-            if (!RestoreNuget(project.FilePath))
                 throw new InvalidOperationException();
             Compilation? compilation = project.GetCompilationAsync().Result;
             if (compilation == null)
@@ -47,48 +47,15 @@ namespace SourceCodeCheckApp.Processors
                     throw new InvalidOperationException();
                 if (ProjectIgnoredFiles.IgnoreFile(sourceFile.FilePath))
                     continue;
+                String filePath = sourceFile.FilePath;
+                _output.WriteInfoLine($"Processing of the file {filePath} is started");
                 SyntaxTree? syntaxTree = sourceFile.GetSyntaxTreeAsync().Result;
                 if (syntaxTree == null)
                     throw new InvalidOperationException();
-                result &= ProcessFile(sourceFile.FilePath, syntaxTree, compilation.GetSemanticModel(syntaxTree), analyzers);
+                result &= ProcessFile(filePath, syntaxTree, compilation.GetSemanticModel(syntaxTree), analyzers);
+                _output.WriteInfoLine($"Processing of the file {filePath} is finished");
             }
             return result;
-        }
-
-        private Boolean RestoreNuget(String projectPath)
-        {
-            // It seems that the best solution to restore nuget packages is to use "dotnet restore" command.
-            using (Process process = new Process())
-            {
-                process.StartInfo.FileName = "dotnet";
-                process.StartInfo.Arguments = $"restore {projectPath}";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.OutputDataReceived += delegate (object _, DataReceivedEventArgs e)
-                {
-                    if (e.Data != null)
-                        _output.WriteInfoLine($"{e.Data}");
-                };
-                process.ErrorDataReceived += delegate (object _, DataReceivedEventArgs e)
-                {
-                    if (e.Data != null)
-                        _output.WriteErrorLine($"{e.Data}");
-                };
-                try
-                {
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-                    process.WaitForExit();
-                    return process.ExitCode == 0;
-                }
-                catch (Exception ex)
-                {
-                    _output.WriteErrorLine($"{ex.Message}");
-                    return false;
-                }
-            }
         }
 
         private Boolean ProcessFile(String filename, SyntaxTree tree, SemanticModel model, IList<IFileAnalyzer> analyzers)
@@ -99,5 +66,47 @@ namespace SourceCodeCheckApp.Processors
 
         private readonly String _projectFilename;
         private readonly OutputImpl _output;
+    }
+
+    internal record AppExecuteResult(Int32 ExitCode, String[] Output, String[] Error);
+
+    internal static class DotnetHelper
+    {
+        public static AppExecuteResult Build(String path)
+        {
+            IList<String> output = new List<String>();
+            IList<String> error = new List<String>();
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = $"build {path}";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.OutputDataReceived += delegate (object _, DataReceivedEventArgs e)
+                {
+                    if (e.Data != null)
+                        output.Add($"{e.Data}");
+                };
+                process.ErrorDataReceived += delegate (object _, DataReceivedEventArgs e)
+                {
+                    if (e.Data != null)
+                        error.Add($"{e.Data}");
+                };
+                try
+                {
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+                    return new AppExecuteResult(ExitCode: process.ExitCode, Output: output.ToArray(), Error: error.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    error.Add($"{ex.Message}");
+                    return new AppExecuteResult(ExitCode: -1, Output: output.ToArray(), Error: error.ToArray());
+                }
+            }
+        }
     }
 }

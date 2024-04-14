@@ -9,6 +9,8 @@ namespace SourceCodeCheckApp.Config
     {
         public static AppConfig Create(AppArgsResult.MainConfig config)
         {
+            if (!File.Exists(config.ConfigPath))
+                throw new InvalidOperationException("Unknown config");
             using (StreamReader reader = new StreamReader(config.ConfigPath))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(ConfigData));

@@ -18,6 +18,8 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the solution {_solutionFilename} is started");
+            if (DotnetHelper.Build(_solutionFilename).ExitCode != 0)
+                throw new InvalidOperationException();
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             if (!File.Exists(_solutionFilename))
             {
@@ -26,23 +28,14 @@ namespace SourceCodeCheckApp.Processors
             }
             Solution solution = workspace.OpenSolutionAsync(_solutionFilename).Result;
             Boolean result = true;
-            foreach (ProjectId projectId in solution.GetProjectDependencyGraph().GetTopologicallySortedProjects())
+            foreach (Project project in solution.Projects.OrderBy(project => project.Name))
             {
-                Project? project = solution.GetProject(projectId);
-                if (project == null)
-                    throw new InvalidOperationException();
-                result &= Process(project, analyzers);
+                _output.WriteInfoLine($"Processing of the project {project.FilePath} is started");
+                ProjectProcessor projectProcessor = new ProjectProcessor(project.FilePath, _output);
+                result &= projectProcessor.Process(project, analyzers);
+                _output.WriteInfoLine($"Processing of the project {project.FilePath} is finished");
             }
             _output.WriteInfoLine($"Processing of the solution {_solutionFilename} is finished");
-            return result;
-        }
-
-        private Boolean Process(Project project, IList<IFileAnalyzer> analyzers)
-        {
-            _output.WriteInfoLine($"Processing of the project {project.FilePath} is started");
-            ProjectProcessor projectProcessor = new ProjectProcessor(project.FilePath, _output);
-            Boolean result = projectProcessor.Process(project, analyzers);
-            _output.WriteInfoLine($"Processing of the project {project.FilePath} is finished");
             return result;
         }
 

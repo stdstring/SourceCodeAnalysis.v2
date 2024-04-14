@@ -1,6 +1,0 @@
-<Config>
-  <BaseConfig>
-    <Source>../../../../Examples/TestSolution/TestSolution.sln</Source>
-    <OutputLevel>Info</OutputLevel>
-  </BaseConfig>
-</Config>
