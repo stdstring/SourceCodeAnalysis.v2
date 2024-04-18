@@ -57,11 +57,20 @@ namespace SourceCodeCheckApp.Analyzers
                 TypeSyntax typeSyntax = node.Type;
                 ExpressionSyntax expressionSyntax = node.Expression;
                 ITypeSymbol? type = _model.GetTypeInfo(typeSyntax).Type;
-                ITypeSymbol? expressionType = _model.GetTypeInfo(expressionSyntax).Type;
-                if ((type == null) || (expressionType == null))
-                    throw new InvalidOperationException();
-                if (type.Equals(expressionType, SymbolEqualityComparer.Default))
-                    Data.Add(new AnalyzerData<TypeData>(new TypeData(type), span));
+                switch (expressionSyntax)
+                {
+                    case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.NullLiteralExpression):
+                        break;
+                    default:
+                    {
+                        ITypeSymbol? expressionType = _model.GetTypeInfo(expressionSyntax).Type;
+                        if ((type == null) || (expressionType == null))
+                            throw new InvalidOperationException();
+                        if (type.Equals(expressionType, SymbolEqualityComparer.Default))
+                            Data.Add(new AnalyzerData<TypeData>(TypeData.Create(type), span));
+                        break;
+                    }
+                }
             }
 
             public IList<AnalyzerData<TypeData>> Data { get; } = new List<AnalyzerData<TypeData>>();
