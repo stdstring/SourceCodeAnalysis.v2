@@ -1,19 +1,25 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
     internal class BadFilenameCaseAnalyzer : IFileAnalyzer
     {
-        public BadFilenameCaseAnalyzer(OutputImpl output)
+        public const String Name = "SourceCodeCheckApp.Analyzers.BadFilenameCaseAnalyzer";
+
+        public BadFilenameCaseAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
-            _output = output;
+            _output = new AnalyserOutputWrapper(output, analyzerState);
+            _analyzerState = analyzerState;
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
         {
+            if (_analyzerState == AnalyzerState.Off)
+                return true;
             _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer started");
             TopLevelTypeNamesCollector collector = new TopLevelTypeNamesCollector(model);
             collector.Visit(tree.GetRoot());
@@ -74,7 +80,8 @@ namespace SourceCodeCheckApp.Analyzers
             }
         }
 
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
+        private readonly AnalyzerState _analyzerState;
 
         private class TopLevelTypeNamesCollector : CSharpSyntaxWalker
         {

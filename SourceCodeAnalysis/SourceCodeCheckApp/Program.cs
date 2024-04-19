@@ -40,10 +40,10 @@ namespace SourceCodeCheckApp
                     return false;
                 case AppArgsResult.MainConfig mainConfig:
                     AppConfig appConfig = AppConfigFactory.Create(mainConfig);
-                    OutputImpl output = new OutputImpl(Console.Out, Console.Error, appConfig.Config.BaseConfig!.OutputLevel);
+                    IOutput output = new OutputImpl(Console.Out, Console.Error, appConfig.Config.BaseConfig!.OutputLevel);
                     PrerequisitesManager.Run();
                     ISourceProcessor processor = SourceProcessorFactory.Create(appConfig.Config.BaseConfig.Source!, output);
-                    IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(output);
+                    IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(output, appConfig.Config.Analyzers ?? Array.Empty<AnalyzerEntry>());
                     Boolean processResult = processor.Process(analyzers);
                     output.WriteInfoLine($"Result of analysis: analysis is {(processResult ? "succeeded" : "failed")}");
                     return processResult;

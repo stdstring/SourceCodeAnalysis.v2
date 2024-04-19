@@ -1,19 +1,25 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
     internal class NonAsciiIdentifiersAnalyzer : IFileAnalyzer
     {
-        public NonAsciiIdentifiersAnalyzer(OutputImpl output)
+        public const String Name = "SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer";
+
+        public NonAsciiIdentifiersAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
-            _output = output;
+            _output = new AnalyserOutputWrapper(output, analyzerState);
+            _analyzerState = analyzerState;
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
         {
+            if (_analyzerState == AnalyzerState.Off)
+                return true;
             _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer started");
             Regex identifierRegex = new Regex("^[a-zA-Z0-9_]+$");
             NonConsistentIdentifiersDetector detector = new NonConsistentIdentifiersDetector(identifierRegex);
@@ -31,7 +37,8 @@ namespace SourceCodeCheckApp.Analyzers
             return errors.Count > 0;
         }
 
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
+        private readonly AnalyzerState _analyzerState;
 
         private class NonConsistentIdentifiersDetector : CSharpSyntaxWalker
         {

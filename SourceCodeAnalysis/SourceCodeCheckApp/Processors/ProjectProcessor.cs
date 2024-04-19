@@ -9,7 +9,7 @@ namespace SourceCodeCheckApp.Processors
 {
     internal class ProjectProcessor : ISourceProcessor
     {
-        public ProjectProcessor(String? projectFilename, OutputImpl output)
+        public ProjectProcessor(String? projectFilename, IOutput output)
         {
             if (String.IsNullOrEmpty(projectFilename))
                 throw new ArgumentNullException(nameof(projectFilename));
@@ -65,7 +65,7 @@ namespace SourceCodeCheckApp.Processors
         }
 
         private readonly String _projectFilename;
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
     }
 
     internal record AppExecuteResult(Int32 ExitCode, String[] Output, String[] Error);

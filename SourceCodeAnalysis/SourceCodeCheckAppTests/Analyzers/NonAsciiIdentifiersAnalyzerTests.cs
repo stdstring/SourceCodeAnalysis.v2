@@ -126,6 +126,6 @@ namespace SourceCodeCheckAppTests.Analyzers
             AnalyzerHelper.Process(_analyzerFactory, source, "NonAsciiIdentifiers", filePath, OutputLevel.Info, true, SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput);
         }
 
-        private readonly Func<OutputImpl, IFileAnalyzer> _analyzerFactory = output => new NonAsciiIdentifiersAnalyzer(output);
+        private readonly Func<IOutput, IFileAnalyzer> _analyzerFactory = output => new NonAsciiIdentifiersAnalyzer(output, AnalyzerState.On);
     }
 }

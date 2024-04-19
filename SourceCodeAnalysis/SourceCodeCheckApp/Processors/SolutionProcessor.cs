@@ -7,7 +7,7 @@ namespace SourceCodeCheckApp.Processors
 {
     internal class SolutionProcessor : ISourceProcessor
     {
-        public SolutionProcessor(String solutionFilename, OutputImpl output)
+        public SolutionProcessor(String solutionFilename, IOutput output)
         {
             if (String.IsNullOrEmpty(solutionFilename))
                 throw new ArgumentNullException(nameof(solutionFilename));
@@ -40,6 +40,6 @@ namespace SourceCodeCheckApp.Processors
         }
 
         private readonly String _solutionFilename;
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
     }
 }

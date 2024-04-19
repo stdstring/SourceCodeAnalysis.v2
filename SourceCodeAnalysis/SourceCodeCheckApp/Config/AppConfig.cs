@@ -37,6 +37,8 @@ namespace SourceCodeCheckApp.Config
                 return (false, "Unknown Config.BaseConfig.Source");
             if (!SourceProcessorFactory.IsSupportedSource(config.BaseConfig.Source))
                 return (false, "Unsupported Config.BaseConfig.Source");
+            if ((config.Analyzers != null) && config.Analyzers.Any(entry => String.IsNullOrEmpty(entry.Name)))
+                return (false, "Bad Config.Analyzers entries");
             return (true, "");
         }
     }

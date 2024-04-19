@@ -271,6 +271,6 @@ namespace SourceCodeCheckAppTests.Analyzers
             AnalyzerHelper.Process(_analyzerFactory, source, "CastToSameType", filePath, OutputLevel.Info, true, SourceCodeCheckAppOutputDef.CastToSameTypeAnalyzerSuccessOutput);
         }
 
-        private readonly Func<OutputImpl, IFileAnalyzer> _analyzerFactory = output => new CastToSameTypeAnalyzer(output);
+        private readonly Func<IOutput, IFileAnalyzer> _analyzerFactory = output => new CastToSameTypeAnalyzer(output, AnalyzerState.On);
     }
 }

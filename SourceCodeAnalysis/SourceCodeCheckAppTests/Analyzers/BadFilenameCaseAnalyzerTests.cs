@@ -248,6 +248,6 @@ namespace SourceCodeCheckAppTests.Analyzers
             AnalyzerHelper.Process(_analyzerFactory, source, "BadFilenameCase", filePath, OutputLevel.Info, true, expectedOutput);
         }
 
-        private readonly Func<OutputImpl, IFileAnalyzer> _analyzerFactory = output => new BadFilenameCaseAnalyzer(output);
+        private readonly Func<IOutput, IFileAnalyzer> _analyzerFactory = output => new BadFilenameCaseAnalyzer(output, AnalyzerState.On);
     }
 }

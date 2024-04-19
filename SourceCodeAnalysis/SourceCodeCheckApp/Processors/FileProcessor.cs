@@ -8,7 +8,7 @@ namespace SourceCodeCheckApp.Processors
 {
     internal class FileProcessor : ISourceProcessor
     {
-        public FileProcessor(String filename, OutputImpl output)
+        public FileProcessor(String filename, IOutput output)
         {
             if (String.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
@@ -53,6 +53,6 @@ namespace SourceCodeCheckApp.Processors
         }
 
         private readonly String _filename;
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
     }
 }

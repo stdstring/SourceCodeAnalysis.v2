@@ -8,7 +8,7 @@ namespace SourceCodeCheckAppTests.Utils
 {
     internal static class AnalyzerHelper
     {
-        public static void Process(Func<OutputImpl, IFileAnalyzer> analyzerFactory, String source, String assemblyName, String filePath, OutputLevel outputLevel, Boolean expectedResult, String expectedOutput)
+        public static void Process(Func<IOutput, IFileAnalyzer> analyzerFactory, String source, String assemblyName, String filePath, OutputLevel outputLevel, Boolean expectedResult, String expectedOutput)
         {
             SemanticModel model = PreparationHelper.Prepare(source, assemblyName);
             using (TextWriter outputWriter = new StringWriter())

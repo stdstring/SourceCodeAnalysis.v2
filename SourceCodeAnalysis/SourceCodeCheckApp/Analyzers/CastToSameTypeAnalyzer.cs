@@ -1,19 +1,25 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
     internal class CastToSameTypeAnalyzer : IFileAnalyzer
     {
-        public CastToSameTypeAnalyzer(OutputImpl output)
+        public const String Name = "SourceCodeCheckApp.Analyzers.CastToSameTypeAnalyzer";
+
+        public CastToSameTypeAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
-            _output = output;
+            _output = new AnalyserOutputWrapper(output, analyzerState);
+            _analyzerState = analyzerState;
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
         {
+            if (_analyzerState == AnalyzerState.Off)
+                return true;
             _output.WriteInfoLine($"Execution of CastToSameTypeAnalyzer started");
             CastToSameTypeDetector detector = new CastToSameTypeDetector(model);
             detector.Visit(tree.GetRoot());
@@ -40,9 +46,10 @@ namespace SourceCodeCheckApp.Analyzers
                 _output.WriteWarningLine(filePath, warning.StartPosition.Line, $"Found cast to the same type \"{warning.Data.FullName}\"");
         }
 
-        private readonly OutputImpl _output;
+        private readonly IOutput _output;
+        private readonly AnalyzerState _analyzerState;
 
-        private readonly String[] _errorCastTypes = {"System.String"};
+        private readonly String[] _errorCastTypes = new[]{"System.String"};
 
         private class CastToSameTypeDetector : CSharpSyntaxWalker
         {
