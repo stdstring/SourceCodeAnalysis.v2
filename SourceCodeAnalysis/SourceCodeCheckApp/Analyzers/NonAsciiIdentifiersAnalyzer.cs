@@ -26,7 +26,7 @@ namespace SourceCodeCheckApp.Analyzers
             detector.Visit(tree.GetRoot());
             Boolean hasErrors = ProcessErrors(filePath, detector.Data);
             _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer finished");
-            return !hasErrors;
+            return (_analyzerState != AnalyzerState.On) || !hasErrors;
         }
 
         private Boolean ProcessErrors(String filePath, IList<AnalyzerData<String>> errors)

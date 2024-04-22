@@ -26,7 +26,7 @@ namespace SourceCodeCheckApp.Analyzers
             Boolean hasErrors = ProcessErrors(filePath, detector.Data);
             ProcessWarnings(filePath, detector.Data);
             _output.WriteInfoLine($"Execution of CastToSameTypeAnalyzer finished");
-            return !hasErrors;
+            return (_analyzerState != AnalyzerState.On) || !hasErrors;
         }
 
         private Boolean ProcessErrors(String filePath, IList<AnalyzerData<TypeData>> data)

@@ -6,23 +6,39 @@ using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckAppTests.Utils
 {
-    internal static class AnalyzerHelper
+    internal class AnalyzerHelper
     {
-        public static void Process(Func<IOutput, IFileAnalyzer> analyzerFactory, String source, String assemblyName, String filePath, OutputLevel outputLevel, Boolean expectedResult, String expectedOutput)
+        public AnalyzerHelper(String source, String assemblyName, String filePath, OutputLevel outputLevel)
         {
-            SemanticModel model = PreparationHelper.Prepare(source, assemblyName);
+            _source = source;
+            _assemblyName = assemblyName;
+            _filePath = filePath;
+            _outputLevel = outputLevel;
+        }
+
+        public void Process(Func<IOutput, IFileAnalyzer> analyzerFactory, Boolean expectedResult, String expectedOutput)
+        {
+            SemanticModel model = PreparationHelper.Prepare(_source, _assemblyName);
             using (TextWriter outputWriter = new StringWriter())
             using (TextWriter errorWriter = new StringWriter())
             {
-                OutputImpl output = new OutputImpl(outputWriter, errorWriter, outputLevel);
+                OutputImpl output = new OutputImpl(outputWriter, errorWriter, _outputLevel);
                 IFileAnalyzer analyzer = analyzerFactory(output);
-                Boolean actualResult = analyzer.Process(filePath, model.SyntaxTree, model);
-                Assert.That(actualResult, Is.EqualTo(expectedResult));
+                Boolean actualResult = analyzer.Process(_filePath, model.SyntaxTree, model);
                 String actualOutput = outputWriter.ToString() ?? "";
-                Assert.That(actualOutput, Is.EqualTo(expectedOutput));
                 String actualError = errorWriter.ToString() ?? "";
-                Assert.That(actualError, Is.Empty);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(actualResult, Is.EqualTo(expectedResult));
+                    Assert.That(actualOutput, Is.EqualTo(expectedOutput));
+                    Assert.That(actualError, Is.Empty);
+                });
             }
         }
+
+        private readonly String _source;
+        private readonly String _assemblyName;
+        private readonly String _filePath;
+        private readonly OutputLevel _outputLevel;
     }
 }

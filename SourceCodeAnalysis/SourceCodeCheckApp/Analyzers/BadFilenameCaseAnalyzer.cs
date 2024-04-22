@@ -25,7 +25,7 @@ namespace SourceCodeCheckApp.Analyzers
             collector.Visit(tree.GetRoot());
             Boolean result = Process(filePath, collector.Data);
             _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer finished");
-            return result;
+            return (_analyzerState != AnalyzerState.On) || result;
         }
 
         private Boolean Process(String filePath, IList<AnalyzerData<TypeData>> data)
