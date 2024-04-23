@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.MSBuild;
 using SourceCodeCheckApp.Analyzers;
 using SourceCodeCheckApp.Output;
+using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Processors
 {
@@ -18,8 +19,7 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the solution {_solutionFilename} is started");
-            if (DotnetHelper.Build(_solutionFilename).ExitCode != 0)
-                throw new InvalidOperationException();
+            DotnetUtilityService.Build(_solutionFilename, _output);
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             if (!File.Exists(_solutionFilename))
             {

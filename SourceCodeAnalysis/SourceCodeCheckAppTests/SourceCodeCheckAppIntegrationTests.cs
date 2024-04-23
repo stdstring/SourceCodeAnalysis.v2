@@ -97,6 +97,7 @@ namespace SourceCodeCheckAppTests
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             String projectDir = Path.GetFullPath(Path.GetDirectoryName(projectFilename)!);
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
@@ -144,6 +145,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessGoodExampleProjectError", projectFilename, OutputLevel.Info);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   "Processing of the file {1}\\CastsExample.cs is finished\r\n" +
@@ -207,6 +209,7 @@ namespace SourceCodeCheckAppTests
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             String projectDir = Path.GetDirectoryName(projectFilename)!;
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
@@ -299,6 +302,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectInfo", projectFilename, OutputLevel.Info, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
@@ -365,6 +369,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectInfo", projectFilename, OutputLevel.Info);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   "Processing of the file {1}\\CastsExample.cs is finished\r\n" +
@@ -433,6 +438,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectInfo", projectFilename, OutputLevel.Info, analyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the project {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
@@ -531,6 +537,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessTestSolutionInfo", solutionFilename, OutputLevel.Info, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the solution {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   "Processing of the project {1}\\BadExample\\BadExample.csproj is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is started\r\n" +
@@ -636,6 +643,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessTestSolution", solutionFilename, OutputLevel.Info);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the solution {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   "Processing of the project {1}\\BadExample\\BadExample.csproj is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is started\r\n" +
@@ -726,6 +734,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessTestSolutionInfo", solutionFilename, OutputLevel.Info, analyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             const String expectedOutputTemplate = "Processing of the solution {0} is started\r\n" +
+                                                  "dotnet build is succeeded\r\n" +
                                                   "Processing of the project {1}\\BadExample\\BadExample.csproj is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.CompilationCheckSuccessOutput +
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is started\r\n" +

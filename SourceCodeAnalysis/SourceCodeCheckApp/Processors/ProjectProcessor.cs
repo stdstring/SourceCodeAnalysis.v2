@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.MSBuild;
 using SourceCodeCheckApp.Analyzers;
 using SourceCodeCheckApp.Output;
 using SourceCodeCheckApp.Utils;
-using System.Diagnostics;
 
 namespace SourceCodeCheckApp.Processors
 {
@@ -22,8 +21,7 @@ namespace SourceCodeCheckApp.Processors
         public Boolean Process(IList<IFileAnalyzer> analyzers)
         {
             _output.WriteInfoLine($"Processing of the project {_projectFilename} is started");
-            if (DotnetHelper.Build(_projectFilename).ExitCode != 0)
-                throw new InvalidOperationException();
+            DotnetUtilityService.Build(_projectFilename, _output);
             MSBuildWorkspace workspace = MSBuildWorkspace.Create();
             Project project = workspace.OpenProjectAsync(_projectFilename).Result;
             Boolean result = Process(project, analyzers);
@@ -66,47 +64,5 @@ namespace SourceCodeCheckApp.Processors
 
         private readonly String _projectFilename;
         private readonly IOutput _output;
-    }
-
-    internal record AppExecuteResult(Int32 ExitCode, String[] Output, String[] Error);
-
-    internal static class DotnetHelper
-    {
-        public static AppExecuteResult Build(String path)
-        {
-            IList<String> output = new List<String>();
-            IList<String> error = new List<String>();
-            using (Process process = new Process())
-            {
-                process.StartInfo.FileName = "dotnet";
-                process.StartInfo.Arguments = $"build {path}";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.OutputDataReceived += delegate (object _, DataReceivedEventArgs e)
-                {
-                    if (e.Data != null)
-                        output.Add($"{e.Data}");
-                };
-                process.ErrorDataReceived += delegate (object _, DataReceivedEventArgs e)
-                {
-                    if (e.Data != null)
-                        error.Add($"{e.Data}");
-                };
-                try
-                {
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-                    process.WaitForExit();
-                    return new AppExecuteResult(ExitCode: process.ExitCode, Output: output.ToArray(), Error: error.ToArray());
-                }
-                catch (Exception ex)
-                {
-                    error.Add($"{ex.Message}");
-                    return new AppExecuteResult(ExitCode: -1, Output: output.ToArray(), Error: error.ToArray());
-                }
-            }
-        }
     }
 }
