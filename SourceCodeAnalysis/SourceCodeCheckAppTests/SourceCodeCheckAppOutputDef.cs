@@ -2,14 +2,14 @@
 {
     internal static class SourceCodeCheckAppOutputDef
     {
-        public const String BadUsageMessage = "[ERROR]: Bad usage of the application.";
-        public const String BadSourceMessage = "[ERROR]: Bad/empty/unknown source path.";
+        public const String BadArgsMessage = "[ERROR]: Bad args";
+        public const String UnknownConfigMessage = "[ERROR]: Unknown config";
+        public const String BadConfigMessage = "[ERROR]: Bad config path";
+        public const String UnknownSourceMessage = "[ERROR]: Unknown Config.BaseConfig.Source";
         public const String AppDescription = "Application usage:\r\n" +
-                                             "1. {APP} --source={solution-filename.sln|project-filename.csproj|cs-filename.cs} [--output-level={Error|Warning|Info}]\r\n" +
-                                             "2. {APP} --help\r\n" +
-                                             "3. {APP} --version\r\n" +
-                                             "Default values:\r\n" +
-                                             "1. output-level=Error";
+                                             "1. <app> --config=<path to config file>\r\n" +
+                                             "2. <app> --help\r\n" +
+                                             "3. <app> --version\r\n";
 
         public const String NugetRestoreOutput = "  Determining projects to restore...\r\n" +
                                                  "  All projects are up-to-date for restore.\r\n";

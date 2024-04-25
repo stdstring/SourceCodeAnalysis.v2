@@ -1,31 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckAppTests.Utils
 {
     internal static class ExecutionHelper
     {
-        public static ExecutionResult Execute(String target, OutputLevel outputLevel)
-        {
-            return Execute(target, outputLevel, new Dictionary<String, String>());
-        }
-
-        public static ExecutionResult Execute(String target, OutputLevel outputLevel, IDictionary<String, String> environmentVariables)
-        {
-            if (String.IsNullOrEmpty(target))
-                throw new ArgumentNullException(nameof(target));
-            String arguments = CreateArgList(target, outputLevel);
-            return Execute(arguments, environmentVariables);
-        }
-
         public static ExecutionResult Execute(String arguments)
-        {
-            return Execute(arguments, new Dictionary<String, String>());
-        }
-
-        public static ExecutionResult Execute(String arguments, IDictionary<String, String> environmentVariables)
         {
             using (Process utilProcess = new Process())
             {
@@ -39,8 +20,6 @@ namespace SourceCodeCheckAppTests.Utils
                 utilProcess.StartInfo.StandardErrorEncoding = Encoding.UTF8;
                 utilProcess.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 utilProcess.StartInfo.WorkingDirectory = currentDir;
-                foreach (KeyValuePair<String, String> environmentVariable in environmentVariables)
-                    utilProcess.StartInfo.Environment.Add(environmentVariable.Key, environmentVariable.Value);
                 IList<String> output = new List<String>();
                 IList<String> error = new List<String>();
                 utilProcess.OutputDataReceived += (_, e) =>
@@ -59,14 +38,6 @@ namespace SourceCodeCheckAppTests.Utils
                 utilProcess.WaitForExit();
                 return new ExecutionResult(utilProcess.ExitCode, String.Join("\r\n", output), String.Join("\r\n", error));
             }
-        }
-
-        private static String CreateArgList(String target, OutputLevel outputLevel)
-        {
-            StringBuilder dest = new StringBuilder();
-            dest.AppendFormat("--source=\"{0}\"", target);
-            dest.AppendFormat(" --output-level={0}", outputLevel);
-            return dest.ToString();
         }
 
         private const String UtilFilename = "SourceCodeCheckApp.exe";

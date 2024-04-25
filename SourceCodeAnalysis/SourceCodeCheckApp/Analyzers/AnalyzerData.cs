@@ -10,12 +10,21 @@ namespace SourceCodeCheckApp.Analyzers
         }
     }
 
-    internal record TypeData(String NamespaceName, String TypeName)
+    internal abstract record TypeData(String FullName)
     {
-        public TypeData(ITypeSymbol type) : this(type.ContainingNamespace.ToDisplayString(), type.Name)
-        {
-        }
+        internal record UsualType(String NamespaceName, String TypeName) :
+            TypeData($"{NamespaceName}.{TypeName}");
 
-        public readonly String FullName = $"{NamespaceName}.{TypeName}";
+        internal record ArrayType(TypeData ElementType, Int32 Rank) :
+            TypeData($"{ElementType.FullName}{String.Join("", Enumerable.Repeat("[]", Rank))}");
+
+        public static TypeData Create(ITypeSymbol type)
+        {
+            return type switch
+            {
+                IArrayTypeSymbol{ElementType: var elementType, Rank: var rank} => new ArrayType(Create(elementType), rank),
+                _ => new UsualType(type.ContainingNamespace.ToDisplayString(), type.Name)
+            };
+        }
     }
 }

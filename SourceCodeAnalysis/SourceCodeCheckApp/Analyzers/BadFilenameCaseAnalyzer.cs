@@ -1,25 +1,31 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
     internal class BadFilenameCaseAnalyzer : IFileAnalyzer
     {
-        public BadFilenameCaseAnalyzer(OutputImpl output)
+        public const String Name = "SourceCodeCheckApp.Analyzers.BadFilenameCaseAnalyzer";
+
+        public BadFilenameCaseAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
-            _output = output;
+            _output = new AnalyserOutputWrapper(output, analyzerState);
+            _analyzerState = analyzerState;
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
         {
+            if (_analyzerState == AnalyzerState.Off)
+                return true;
             _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer started");
             TopLevelTypeNamesCollector collector = new TopLevelTypeNamesCollector(model);
             collector.Visit(tree.GetRoot());
             Boolean result = Process(filePath, collector.Data);
             _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer finished");
-            return result;
+            return (_analyzerState != AnalyzerState.On) || result;
         }
 
         private Boolean Process(String filePath, IList<AnalyzerData<TypeData>> data)
@@ -30,10 +36,9 @@ namespace SourceCodeCheckApp.Analyzers
             Boolean exactMatch = false;
             foreach (AnalyzerData<TypeData> item in data)
             {
-                String actualTypeName = item.Data.TypeName;
-                if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCulture))
-                    exactMatch = true;
-                else if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCultureIgnoreCase))
+                (Boolean exactMatch, Boolean isWrongNameCase) typeResult = Process(expectedTypeName, item);
+                exactMatch |= typeResult.exactMatch;
+                if (typeResult.isWrongNameCase)
                     typeWrongNameCaseList.Add(item);
             }
             if (!exactMatch && typeWrongNameCaseList.Count == 0)
@@ -54,7 +59,29 @@ namespace SourceCodeCheckApp.Analyzers
             return true;
         }
 
-        private readonly OutputImpl _output;
+        private (Boolean exactMatch, Boolean isWrongNameCase) Process(String expectedTypeName, AnalyzerData<TypeData> entry)
+        {
+            switch (entry.Data)
+            {
+                case TypeData.ArrayType:
+                    throw new InvalidOperationException($"Unexpected type {entry.Data.FullName} at {entry.StartPosition.Line}");
+                case TypeData.UsualType{TypeName: var actualTypeName}:
+                {
+                    Boolean exactMatch = false;
+                    Boolean isWrongNameCase = false;
+                    if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCulture))
+                        exactMatch = true;
+                    else if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCultureIgnoreCase))
+                        isWrongNameCase = true;
+                    return (exactMatch, isWrongNameCase);
+                }
+                default:
+                    throw new InvalidOperationException("Unexpected control flow");
+            }
+        }
+
+        private readonly IOutput _output;
+        private readonly AnalyzerState _analyzerState;
 
         private class TopLevelTypeNamesCollector : CSharpSyntaxWalker
         {
@@ -89,7 +116,7 @@ namespace SourceCodeCheckApp.Analyzers
                     throw new InvalidOperationException();
                 FileLinePositionSpan span = node.SyntaxTree.GetLineSpan(node.Span);
                 if (type.ContainingType == null)
-                    Data.Add(new AnalyzerData<TypeData>(new TypeData(type), span));
+                    Data.Add(new AnalyzerData<TypeData>(TypeData.Create(type), span));
             }
 
             public IList<AnalyzerData<TypeData>> Data { get; } = new List<AnalyzerData<TypeData>>();

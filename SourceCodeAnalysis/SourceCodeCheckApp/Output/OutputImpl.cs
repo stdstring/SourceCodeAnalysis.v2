@@ -1,8 +1,10 @@
-﻿namespace SourceCodeCheckApp.Output
+﻿using SourceCodeCheckApp.Config;
+
+namespace SourceCodeCheckApp.Output
 {
     // TODO (std_string) : think about using of logger - alternate approach
     // TODO (std_string) : think about name
-    internal class OutputImpl
+    internal class OutputImpl : IOutput
     {
         public OutputImpl(TextWriter output, TextWriter error, OutputLevel outputLevel)
         {
@@ -57,11 +59,11 @@
             WriteLine(Error, ErrorPrefix, filename, line, value);
         }
 
-        public TextWriter Output { get; }
+        private TextWriter Output { get; }
 
-        public TextWriter Error { get; }
+        private TextWriter Error { get; }
 
-        public OutputLevel OutputLevel { get; }
+        private OutputLevel OutputLevel { get; }
 
         private static void WriteLine(TextWriter writer, String prefix, String value)
         {

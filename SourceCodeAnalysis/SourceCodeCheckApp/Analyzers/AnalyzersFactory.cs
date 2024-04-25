@@ -1,16 +1,19 @@
-﻿using SourceCodeCheckApp.Output;
+﻿using SourceCodeCheckApp.Config;
+using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
     internal static class AnalyzersFactory
     {
-        public static IList<IFileAnalyzer> Create(OutputImpl output)
+        public static IList<IFileAnalyzer> Create(IOutput output, AnalyzerEntry[] config)
         {
+            IDictionary<String, AnalyzerState> analyzersMap = config.ToDictionary(entry => entry.Name!, entry => entry.State);
+            AnalyzerState GetAnalyzerState(String name) => analyzersMap.TryGetValue(name, out var state) ? state : AnalyzerState.Off;
             return new IFileAnalyzer[]
             {
-                new BadFilenameCaseAnalyzer(output),
-                new CastToSameTypeAnalyzer(output),
-                new NonAsciiIdentifiersAnalyzer(output)
+                new BadFilenameCaseAnalyzer(output, GetAnalyzerState(BadFilenameCaseAnalyzer.Name)),
+                new CastToSameTypeAnalyzer(output, GetAnalyzerState(CastToSameTypeAnalyzer.Name)),
+                new NonAsciiIdentifiersAnalyzer(output, GetAnalyzerState(NonAsciiIdentifiersAnalyzer.Name))
             };
         }
     }

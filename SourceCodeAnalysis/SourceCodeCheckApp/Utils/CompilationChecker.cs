@@ -5,7 +5,7 @@ namespace SourceCodeCheckApp.Utils
 {
     internal static class CompilationChecker
     {
-        public static Boolean CheckCompilationErrors(String filename, Compilation compilation, OutputImpl output)
+        public static Boolean CheckCompilationErrors(String filename, Compilation compilation, IOutput output)
         {
             output.WriteInfoLine("Checking compilation for errors and warnings:");
             IList<Diagnostic> diagnostics = compilation.GetDiagnostics();
