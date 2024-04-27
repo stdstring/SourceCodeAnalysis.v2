@@ -13,7 +13,9 @@ namespace SourceCodeCheckApp.Analyzers
             {
                 new BadFilenameCaseAnalyzer(output, GetAnalyzerState(BadFilenameCaseAnalyzer.Name)),
                 new CastToSameTypeAnalyzer(output, GetAnalyzerState(CastToSameTypeAnalyzer.Name)),
-                new NonAsciiIdentifiersAnalyzer(output, GetAnalyzerState(NonAsciiIdentifiersAnalyzer.Name))
+                new NonAsciiIdentifiersAnalyzer(output, GetAnalyzerState(NonAsciiIdentifiersAnalyzer.Name)),
+                new StringInterpolationExprAnalyzer(output, GetAnalyzerState(StringInterpolationExprAnalyzer.Name)),
+                new DefaultLiteralAnalyzer(output, GetAnalyzerState(DefaultLiteralAnalyzer.Name))
             };
         }
     }

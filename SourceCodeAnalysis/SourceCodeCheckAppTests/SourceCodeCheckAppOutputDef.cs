@@ -34,5 +34,9 @@ namespace SourceCodeCheckAppTests
         public const String StringInterpolationExprAnalyzerSuccessOutput = $"Execution of {StringInterpolationExprAnalyzer.Name} started\r\n" +
                                                                            "Found 0 string interpolation expressions\r\n" +
                                                                            $"Execution of {StringInterpolationExprAnalyzer.Name} finished\r\n";
+
+        public const String DefaultLiteralAnalyzerSuccessOutput = $"Execution of {DefaultLiteralAnalyzer.Name} started\r\n" +
+                                                                  "Found 0 target-typed default literals\r\n" +
+                                                                  $"Execution of {DefaultLiteralAnalyzer.Name} finished\r\n";
     }
 }
