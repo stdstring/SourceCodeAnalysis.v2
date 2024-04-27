@@ -8,6 +8,7 @@ namespace SourceCodeCheckAppTests
         public const String UnknownConfigMessage = "[ERROR]: Unknown config";
         public const String BadConfigMessage = "[ERROR]: Bad config path";
         public const String UnknownSourceMessage = "[ERROR]: Unknown Config.BaseConfig.Source";
+        public const String UnsupportedSourceMessage = "[ERROR]: Unsupported Config.BaseConfig.Source";
         public const String AppDescription = "Application usage:\r\n" +
                                              "1. <app> --config=<path to config file>\r\n" +
                                              "2. <app> --help\r\n" +

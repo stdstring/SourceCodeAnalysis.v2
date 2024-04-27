@@ -45,7 +45,7 @@ Config file has the following form:
 ```
 <Config>
   <BaseConfig>
-    <Source>(Path-to-file|Path-to-project|Path-to-solution)</Source>
+    <Source>(Path-to-project|Path-to-solution)</Source>
     <OutputLevel>(Info|Warning|Error)</OutputLevel>
   </BaseConfig>
   <Analyzers>

@@ -67,6 +67,15 @@ namespace SourceCodeCheckAppTests
         }
 
         [Test]
+        public void ProcessSingleFile()
+        {
+            String filename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\SomeBaseLibrary\\SomeBaseClass.cs");
+            String configPath = ConfigGenerator.Generate("ProcessSingleFile", filename);
+            ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
+            ExecutionChecker.Check(executionResult, -1, "", SourceCodeCheckAppOutputDef.UnsupportedSourceMessage);
+        }
+
+        [Test]
         public void ProcessGoodExampleProjectError()
         {
             String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\GoodExample\\GoodExample.csproj");

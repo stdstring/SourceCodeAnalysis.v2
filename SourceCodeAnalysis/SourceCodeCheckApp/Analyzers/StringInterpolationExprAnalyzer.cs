@@ -22,7 +22,7 @@ namespace SourceCodeCheckApp.Analyzers
             if (_analyzerState == AnalyzerState.Off)
                 return true;
             _output.WriteInfoLine($"Execution of {Name} started");
-            StringInterpolationExprDetector detector = new StringInterpolationExprDetector(model);
+            StringInterpolationExprDetector detector = new StringInterpolationExprDetector();
             detector.Visit(tree.GetRoot());
             _output.WriteInfoLine($"Found {detector.Data.Count} string interpolation expressions");
             if (detector.Data.Count > 0)
@@ -39,11 +39,6 @@ namespace SourceCodeCheckApp.Analyzers
 
         private class StringInterpolationExprDetector : CSharpSyntaxWalker
         {
-            public StringInterpolationExprDetector(SemanticModel model)
-            {
-                _model = model;
-            }
-
             public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
             {
                 FileLinePositionSpan span = node.SyntaxTree.GetLineSpan(node.Span);
@@ -51,8 +46,6 @@ namespace SourceCodeCheckApp.Analyzers
             }
 
             public IList<AnalyzerData<String>> Data { get; } = new List<AnalyzerData<String>>();
-
-            private readonly SemanticModel _model;
         }
     }
 }
