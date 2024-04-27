@@ -20,30 +20,30 @@ namespace SourceCodeCheckApp.Analyzers
         {
             if (_analyzerState == AnalyzerState.Off)
                 return true;
-            _output.WriteInfoLine($"Execution of CastToSameTypeAnalyzer started");
+            _output.WriteInfoLine($"Execution of {Name} started");
             CastToSameTypeDetector detector = new CastToSameTypeDetector(model);
             detector.Visit(tree.GetRoot());
             Boolean hasErrors = ProcessErrors(filePath, detector.Data);
             ProcessWarnings(filePath, detector.Data);
-            _output.WriteInfoLine($"Execution of CastToSameTypeAnalyzer finished");
+            _output.WriteInfoLine($"Execution of {Name} finished");
             return (_analyzerState != AnalyzerState.On) || !hasErrors;
         }
 
-        private Boolean ProcessErrors(String filePath, IList<AnalyzerData<TypeData>> data)
+        private Boolean ProcessErrors(String filePath, IList<AnalyzerData<String>> data)
         {
-            IList<AnalyzerData<TypeData>> errors = data.Where(item => _errorCastTypes.Contains(item.Data.FullName)).ToList();
+            IList<AnalyzerData<String>> errors = data.Where(item => _errorCastTypes.Contains(item.Data)).ToList();
             _output.WriteInfoLine($"Found {errors.Count} casts leading to errors in the ported C++ code");
-            foreach (AnalyzerData<TypeData> error in errors)
-                _output.WriteErrorLine(filePath, error.StartPosition.Line, $"Found cast to the same type \"{error.Data.FullName}\"");
+            foreach (AnalyzerData<String> error in errors)
+                _output.WriteErrorLine(filePath, error.StartPosition.Line, $"Found cast to the same type \"{error.Data}\"");
             return errors.Count > 0;
         }
 
-        private void ProcessWarnings(String filePath, IList<AnalyzerData<TypeData>> data)
+        private void ProcessWarnings(String filePath, IList<AnalyzerData<String>> data)
         {
-            IList<AnalyzerData<TypeData>> warnings = data.Where(item => !_errorCastTypes.Contains(item.Data.FullName)).ToList();
+            IList<AnalyzerData<String>> warnings = data.Where(item => !_errorCastTypes.Contains(item.Data)).ToList();
             _output.WriteInfoLine($"Found {warnings.Count} casts to the same type not leading to errors in the ported C++ code");
-            foreach (AnalyzerData<TypeData> warning in warnings)
-                _output.WriteWarningLine(filePath, warning.StartPosition.Line, $"Found cast to the same type \"{warning.Data.FullName}\"");
+            foreach (AnalyzerData<String> warning in warnings)
+                _output.WriteWarningLine(filePath, warning.StartPosition.Line, $"Found cast to the same type \"{warning.Data}\"");
         }
 
         private readonly IOutput _output;
@@ -74,13 +74,13 @@ namespace SourceCodeCheckApp.Analyzers
                         if ((type == null) || (expressionType == null))
                             throw new InvalidOperationException();
                         if (type.Equals(expressionType, SymbolEqualityComparer.Default))
-                            Data.Add(new AnalyzerData<TypeData>(TypeData.Create(type), span));
+                            Data.Add(new AnalyzerData<String>(TypeData.Create(type).FullName, span));
                         break;
                     }
                 }
             }
 
-            public IList<AnalyzerData<TypeData>> Data { get; } = new List<AnalyzerData<TypeData>>();
+            public IList<AnalyzerData<String>> Data { get; } = new List<AnalyzerData<String>>();
 
             private readonly SemanticModel _model;
         }

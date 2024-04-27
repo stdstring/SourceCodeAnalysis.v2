@@ -20,11 +20,11 @@ namespace SourceCodeCheckApp.Analyzers
         {
             if (_analyzerState == AnalyzerState.Off)
                 return true;
-            _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer started");
+            _output.WriteInfoLine($"Execution of {Name} started");
             TopLevelTypeNamesCollector collector = new TopLevelTypeNamesCollector(model);
             collector.Visit(tree.GetRoot());
             Boolean result = Process(filePath, collector.Data);
-            _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer finished");
+            _output.WriteInfoLine($"Execution of {Name} finished");
             return (_analyzerState != AnalyzerState.On) || result;
         }
 

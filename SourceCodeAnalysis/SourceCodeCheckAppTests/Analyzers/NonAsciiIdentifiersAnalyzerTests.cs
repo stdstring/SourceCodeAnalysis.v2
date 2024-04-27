@@ -99,7 +99,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of NonAsciiIdentifiersAnalyzer started\r\n" +
+            const String expectedOutputTemplate = $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
                                                   "Found 9 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
                                                   "{0}(1): [{1}]: Found non-ASCII identifier \"SomeНеймспейс\"\r\n" +
                                                   "{0}(3): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
@@ -110,7 +110,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"другойObj\"\r\n" +
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
-                                                  "Execution of NonAsciiIdentifiersAnalyzer finished\r\n";
+                                                  $"Execution of {NonAsciiIdentifiersAnalyzer.Name} finished\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "NonAsciiIdentifiers", FilePath, OutputLevel.Info);

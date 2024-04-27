@@ -20,12 +20,12 @@ namespace SourceCodeCheckApp.Analyzers
         {
             if (_analyzerState == AnalyzerState.Off)
                 return true;
-            _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer started");
+            _output.WriteInfoLine($"Execution of {Name} started");
             Regex identifierRegex = new Regex("^[a-zA-Z0-9_]+$");
             NonConsistentIdentifiersDetector detector = new NonConsistentIdentifiersDetector(identifierRegex);
             detector.Visit(tree.GetRoot());
             Boolean hasErrors = ProcessErrors(filePath, detector.Data);
-            _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer finished");
+            _output.WriteInfoLine($"Execution of {Name} finished");
             return (_analyzerState != AnalyzerState.On) || !hasErrors;
         }
 

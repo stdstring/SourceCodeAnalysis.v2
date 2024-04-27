@@ -1,4 +1,6 @@
-﻿namespace SourceCodeCheckAppTests
+﻿using SourceCodeCheckApp.Analyzers;
+
+namespace SourceCodeCheckAppTests
 {
     internal static class SourceCodeCheckAppOutputDef
     {
@@ -11,24 +13,25 @@
                                              "2. <app> --help\r\n" +
                                              "3. <app> --version\r\n";
 
-        public const String NugetRestoreOutput = "  Determining projects to restore...\r\n" +
-                                                 "  All projects are up-to-date for restore.\r\n";
-
         public const String CompilationCheckSuccessOutput = "Checking compilation for errors and warnings:\r\n" +
                                                             "Found 0 errors in the compilation\r\n" +
                                                             "Found 0 warnings in the compilation\r\n";
 
-        public const String BadFilenameCaseAnalyzerSuccessOutput = "Execution of BadFilenameCaseAnalyzer started\r\n" +
+        public const String BadFilenameCaseAnalyzerSuccessOutput = $"Execution of {BadFilenameCaseAnalyzer.Name} started\r\n" +
                                                                    "File contains 0 types with names match to the filename with ignoring case\r\n" +
-                                                                   "Execution of BadFilenameCaseAnalyzer finished\r\n";
+                                                                   $"Execution of {BadFilenameCaseAnalyzer.Name} finished\r\n";
 
-        public const String CastToSameTypeAnalyzerSuccessOutput = "Execution of CastToSameTypeAnalyzer started\r\n" +
+        public const String CastToSameTypeAnalyzerSuccessOutput = $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                                   "Found 0 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                                  "Execution of CastToSameTypeAnalyzer finished\r\n";
+                                                                  $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n";
 
-        public const String NonAsciiIdentifiersAnalyzerSuccessOutput = "Execution of NonAsciiIdentifiersAnalyzer started\r\n" +
+        public const String NonAsciiIdentifiersAnalyzerSuccessOutput = $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
                                                                        "Found 0 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
-                                                                       "Execution of NonAsciiIdentifiersAnalyzer finished\r\n";
+                                                                       $"Execution of {NonAsciiIdentifiersAnalyzer.Name} finished\r\n";
+
+        public const String StringInterpolationExprAnalyzerSuccessOutput = $"Execution of {StringInterpolationExprAnalyzer.Name} started\r\n" +
+                                                                           "Found 0 string interpolation expressions\r\n" +
+                                                                           $"Execution of {StringInterpolationExprAnalyzer.Name} finished\r\n";
     }
 }
