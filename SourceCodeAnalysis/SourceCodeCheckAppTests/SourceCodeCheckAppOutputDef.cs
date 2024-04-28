@@ -38,5 +38,9 @@ namespace SourceCodeCheckAppTests
         public const String DefaultLiteralAnalyzerSuccessOutput = $"Execution of {DefaultLiteralAnalyzer.Name} started\r\n" +
                                                                   "Found 0 target-typed default literals\r\n" +
                                                                   $"Execution of {DefaultLiteralAnalyzer.Name} finished\r\n";
+
+        public const String ObjectInitializerExprAnalyzerSuccessOutput = $"Execution of {ObjectInitializerExprAnalyzer.Name} started\r\n" +
+                                                                         "Found 0 object initializer expressions\r\n" +
+                                                                         $"Execution of {ObjectInitializerExprAnalyzer.Name} finished\r\n";
     }
 }

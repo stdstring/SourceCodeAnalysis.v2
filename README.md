@@ -15,7 +15,7 @@
 1. implementation of analyzer for detecting (as error by default) expression-bodied members
 1. implementation of analyzer for detecting (as error by default) null-conditional operators
 1. implementation of analyzer for detecting (as error by default) auto-implemented properties
-1. implementation of analyzer for detecting (as error by default) object initializer expressions
+1. implementation of analyzer for detecting (as error by default) object initializer expressions **(implemented)**
 1. implementation of analyzer for detecting (as error by default) null-coalescing operators
 1. implementation of analyzer for detecting (as error by default) chained assignments
 1. implementation of analyzer for detecting (as error by default) generic methods that call generic methods of successors
@@ -65,6 +65,14 @@ Config file has the following form:
       <Name>SourceCodeCheckApp.Analyzers.StringInterpolationExprAnalyzer</Name>
       <State>(On|ErrorAsWarning|Off)</State>
     </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.ObjectInitializerExprAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
   </Analyzers>
 </Config>
 ```
@@ -76,3 +84,4 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer** analyzer find all identifiers with non ASCII letters in their names. All such identifiers are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.StringInterpolationExprAnalyzer** analyzer find all string interpolation expressions. All such expressions are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer** analyzer find all target-typed default literals. All such literals are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.ObjectInitializerExprAnalyzer** analyzer find all object initializer expressions. All such expressions are considered as errors.

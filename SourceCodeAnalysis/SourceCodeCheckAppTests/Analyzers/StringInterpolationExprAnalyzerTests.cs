@@ -10,7 +10,7 @@ namespace SourceCodeCheckAppTests.Analyzers
     public class StringInterpolationExprAnalyzerTests
     {
         [Test]
-        public void ProcessWithStringInterpolationExprWithErrorLevel()
+        public void ProcessStringInterpolationExprWithErrorLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -36,7 +36,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithStringInterpolationExprWithWarningLevel()
+        public void ProcessStringInterpolationExprWithWarningLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -63,7 +63,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithStringInterpolationExprWithInfoLevel()
+        public void ProcessStringInterpolationExprWithInfoLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -94,7 +94,7 @@ namespace SourceCodeCheckAppTests.Analyzers
 
         [TestCase(OutputLevel.Error)]
         [TestCase(OutputLevel.Warning)]
-        public void ProcessWithStringFormatExpr(OutputLevel outputLevel)
+        public void ProcessStringFormatExpr(OutputLevel outputLevel)
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -113,7 +113,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithStringFormatExprWithInfoLevel()
+        public void ProcessStringFormatExprWithInfoLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +

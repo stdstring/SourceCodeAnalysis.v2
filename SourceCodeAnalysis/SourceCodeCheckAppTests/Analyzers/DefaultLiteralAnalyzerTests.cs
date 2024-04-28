@@ -10,7 +10,7 @@ namespace SourceCodeCheckAppTests.Analyzers
     public class DefaultLiteralAnalyzerTests
     {
         [Test]
-        public void ProcessWithDefaultLiteralWithErrorLevel()
+        public void ProcessDefaultLiteralWithErrorLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -33,7 +33,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithDefaultLiteralWithWarningLevel()
+        public void ProcessDefaultLiteralWithWarningLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -57,7 +57,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithDefaultLiteralWithInfoLevel()
+        public void ProcessDefaultLiteralWithInfoLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -85,7 +85,7 @@ namespace SourceCodeCheckAppTests.Analyzers
 
         [TestCase(OutputLevel.Error)]
         [TestCase(OutputLevel.Warning)]
-        public void ProcessWithDefaultExpression(OutputLevel outputLevel)
+        public void ProcessDefaultExpression(OutputLevel outputLevel)
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -105,7 +105,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithDefaultExpressionWithInfoLevel()
+        public void ProcessDefaultExpressionWithInfoLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
