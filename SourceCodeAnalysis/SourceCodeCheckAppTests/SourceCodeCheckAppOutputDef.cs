@@ -42,5 +42,9 @@ namespace SourceCodeCheckAppTests
         public const String ObjectInitializerExprAnalyzerSuccessOutput = $"Execution of {ObjectInitializerExprAnalyzer.Name} started\r\n" +
                                                                          "Found 0 object initializer expressions\r\n" +
                                                                          $"Execution of {ObjectInitializerExprAnalyzer.Name} finished\r\n";
+
+        public const String AutoImplPropertiesAnalyzerSuccessOutput = $"Execution of {AutoImplPropertiesAnalyzer.Name} started\r\n" +
+                                                                      "Found 0 auto implemented properties\r\n" +
+                                                                      $"Execution of {AutoImplPropertiesAnalyzer.Name} finished\r\n";
     }
 }

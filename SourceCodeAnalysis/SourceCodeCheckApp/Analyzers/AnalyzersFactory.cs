@@ -15,7 +15,9 @@ namespace SourceCodeCheckApp.Analyzers
                 new CastToSameTypeAnalyzer(output, GetAnalyzerState(CastToSameTypeAnalyzer.Name)),
                 new NonAsciiIdentifiersAnalyzer(output, GetAnalyzerState(NonAsciiIdentifiersAnalyzer.Name)),
                 new StringInterpolationExprAnalyzer(output, GetAnalyzerState(StringInterpolationExprAnalyzer.Name)),
-                new DefaultLiteralAnalyzer(output, GetAnalyzerState(DefaultLiteralAnalyzer.Name))
+                new DefaultLiteralAnalyzer(output, GetAnalyzerState(DefaultLiteralAnalyzer.Name)),
+                new ObjectInitializerExprAnalyzer(output, GetAnalyzerState(ObjectInitializerExprAnalyzer.Name)),
+                new AutoImplPropertiesAnalyzer(output, GetAnalyzerState(AutoImplPropertiesAnalyzer.Name))
             };
         }
     }
