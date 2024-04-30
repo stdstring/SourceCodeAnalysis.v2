@@ -58,5 +58,9 @@ namespace SourceCodeCheckAppTests
         public const String NullConditionalOperatorAnalyzerSuccessOutput = $"Execution of {NullConditionalOperatorAnalyzer.Name} started\r\n" +
                                                                            "Found 0 null-conditional operators\r\n" +
                                                                            $"Execution of {NullConditionalOperatorAnalyzer.Name} finished\r\n";
+
+        public const String OutInlineVariableAnalyzerSuccessOutput = $"Execution of {OutInlineVariableAnalyzer.Name} started\r\n" +
+                                                                     "Found 0 out inline variables\r\n" +
+                                                                     $"Execution of {OutInlineVariableAnalyzer.Name} finished\r\n";
     }
 }

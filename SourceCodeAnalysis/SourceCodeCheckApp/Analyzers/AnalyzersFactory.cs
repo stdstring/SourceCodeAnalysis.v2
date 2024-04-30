@@ -20,7 +20,8 @@ namespace SourceCodeCheckApp.Analyzers
                 new AutoImplPropertiesAnalyzer(output, GetAnalyzerState(AutoImplPropertiesAnalyzer.Name)),
                 new ExprBodiedMemberAnalyzer(output, GetAnalyzerState(ExprBodiedMemberAnalyzer.Name)),
                 new NullCoalescingOperatorAnalyzer(output, GetAnalyzerState(NullCoalescingOperatorAnalyzer.Name)),
-                new NullConditionalOperatorAnalyzer(output, GetAnalyzerState(NullConditionalOperatorAnalyzer.Name))
+                new NullConditionalOperatorAnalyzer(output, GetAnalyzerState(NullConditionalOperatorAnalyzer.Name)),
+                new OutInlineVariableAnalyzer(output, GetAnalyzerState(OutInlineVariableAnalyzer.Name))
             };
         }
     }

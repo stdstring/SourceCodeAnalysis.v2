@@ -109,7 +109,7 @@ namespace SourceCodeCheckAppTests.Analyzers
 
         [TestCase(OutputLevel.Error)]
         [TestCase(OutputLevel.Warning)]
-        public void ProcessWithoutStringInterpolationExpr(OutputLevel outputLevel)
+        public void ProcessWithoutNullConditionalOperator(OutputLevel outputLevel)
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
@@ -135,7 +135,7 @@ namespace SourceCodeCheckAppTests.Analyzers
         }
 
         [Test]
-        public void ProcessWithoutStringInterpolationExprWithInfoLevel()
+        public void ProcessWithoutNullConditionalOperatorWithInfoLevel()
         {
             const String source = "namespace SomeNamespace\r\n" +
                                   "{\r\n" +
