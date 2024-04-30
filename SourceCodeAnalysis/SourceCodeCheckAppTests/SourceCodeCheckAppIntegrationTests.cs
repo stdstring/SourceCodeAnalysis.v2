@@ -91,7 +91,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessGoodExampleProjectWarning", projectFilename, OutputLevel.Warning, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             String projectDir = Path.GetDirectoryName(projectFilename)!;
-            const String expectedOutputTemplate = "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\ClassNameExample.cs(7): [WARNING]: Found type named \"GoodExample.Classnameexample\" which corresponds the filename \"ClassNameExample.cs\" only at ignoring case";
             String expectedOutput = String.Format(expectedOutputTemplate, projectDir);
@@ -113,7 +113,7 @@ namespace SourceCodeCheckAppTests
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput +
@@ -197,7 +197,7 @@ namespace SourceCodeCheckAppTests
             String configPath = ConfigGenerator.Generate("ProcessGoodExampleProjectError", projectFilename, OutputLevel.Warning, analyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
             String projectDir = Path.GetDirectoryName(projectFilename)!;
-            const String expectedOutputTemplate = "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\ClassNameExample.cs(7): [WARNING]: Found type named \"GoodExample.Classnameexample\" which corresponds the filename \"ClassNameExample.cs\" only at ignoring case";
             String expectedOutput = String.Format(expectedOutputTemplate, projectDir);
@@ -225,7 +225,7 @@ namespace SourceCodeCheckAppTests
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   "Processing of the file {1}\\CastsExample.cs is finished\r\n" +
@@ -252,7 +252,7 @@ namespace SourceCodeCheckAppTests
             String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj");
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectError", projectFilename, OutputLevel.Error, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
                                                   "{0}\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\IdentifiersExample.cs(5): [ERROR]: Found non-ASCII identifier \"SоmeSimpleClassA\"\r\n" +
@@ -280,8 +280,8 @@ namespace SourceCodeCheckAppTests
             String projectFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\BadExample\\BadExample.csproj");
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectWarning", projectFilename, OutputLevel.Warning, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
@@ -317,9 +317,9 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 1 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{1}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput +
@@ -424,8 +424,8 @@ namespace SourceCodeCheckAppTests
             };
             String configPath = ConfigGenerator.Generate("ProcessBadExampleProjectWarning", projectFilename, OutputLevel.Warning, analyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case";
@@ -453,9 +453,9 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 1 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{1}\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   "Processing of the file {1}\\CastsExample.cs is finished\r\n" +
@@ -484,7 +484,7 @@ namespace SourceCodeCheckAppTests
             String solutionFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\TestSolution.sln");
             String configPath = ConfigGenerator.Generate("ProcessTestSolutionError", solutionFilename, OutputLevel.Error, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\BadExample\\IdentifiersExample.cs(5): [ERROR]: Found non-ASCII identifier \"SоmeSimpleClassA\"\r\n" +
@@ -512,8 +512,8 @@ namespace SourceCodeCheckAppTests
             String solutionFilename = Path.GetFullPath("..\\..\\..\\..\\Examples\\TestSolution\\TestSolution.sln");
             String configPath = ConfigGenerator.Generate("ProcessTestSolutionWarning", solutionFilename, OutputLevel.Warning, DefaultAnalyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
@@ -531,7 +531,7 @@ namespace SourceCodeCheckAppTests
                                                   "{0}\\BadExample\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"локальноеДействие\"\r\n" +
                                                   "{0}\\BadExample\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам1\"\r\n" +
                                                   "{0}\\BadExample\\IdentifiersExample.cs(31): [ERROR]: Found non-ASCII identifier \"парам2\"\r\n" +
-                                                  "{0}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\GoodExample\\ClassNameExample.cs(7): [WARNING]: Found type named \"GoodExample.Classnameexample\" which corresponds the filename \"ClassNameExample.cs\" only at ignoring case";
             String solutionDir = Path.GetDirectoryName(solutionFilename)!;
@@ -553,9 +553,9 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 1 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{1}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput +
@@ -601,7 +601,7 @@ namespace SourceCodeCheckAppTests
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput +
@@ -717,12 +717,12 @@ namespace SourceCodeCheckAppTests
             };
             String configPath = ConfigGenerator.Generate("ProcessTestSolutionWarning", solutionFilename, OutputLevel.Warning, analyzers);
             ExecutionResult executionResult = ExecutionHelper.Execute($"--config=\"{configPath}\"");
-            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+            const String expectedOutputTemplate = "{0}\\BadExample\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(3): [ERROR]: Found type named \"BadExample.ClassNameExample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
                                                   "{0}\\BadExample\\ClassnameExample.cs(7): [ERROR]: Found type named \"BadExample.Classnameexample\" which corresponds the filename \"ClassnameExample.cs\" only at ignoring case\r\n" +
-                                                  "{0}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{0}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{0}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   "{0}\\GoodExample\\ClassNameExample.cs(7): [WARNING]: Found type named \"GoodExample.Classnameexample\" which corresponds the filename \"ClassNameExample.cs\" only at ignoring case";
             String solutionDir = Path.GetDirectoryName(solutionFilename)!;
@@ -750,9 +750,9 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 1 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\BadExample\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"System.String\"\r\n" +
+                                                  "{1}\\BadExample\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is finished\r\n" +
@@ -779,7 +779,7 @@ namespace SourceCodeCheckAppTests
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
                                                   "Found 0 casts leading to errors in the ported C++ code\r\n" +
                                                   "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
+                                                  "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
                                                   "Processing of the file {1}\\GoodExample\\CastsExample.cs is finished\r\n" +

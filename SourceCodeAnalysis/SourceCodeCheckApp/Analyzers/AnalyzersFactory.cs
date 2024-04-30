@@ -17,7 +17,8 @@ namespace SourceCodeCheckApp.Analyzers
                 new StringInterpolationExprAnalyzer(output, GetAnalyzerState(StringInterpolationExprAnalyzer.Name)),
                 new DefaultLiteralAnalyzer(output, GetAnalyzerState(DefaultLiteralAnalyzer.Name)),
                 new ObjectInitializerExprAnalyzer(output, GetAnalyzerState(ObjectInitializerExprAnalyzer.Name)),
-                new AutoImplPropertiesAnalyzer(output, GetAnalyzerState(AutoImplPropertiesAnalyzer.Name))
+                new AutoImplPropertiesAnalyzer(output, GetAnalyzerState(AutoImplPropertiesAnalyzer.Name)),
+                new ExprBodiedMemberAnalyzer(output, GetAnalyzerState(ExprBodiedMemberAnalyzer.Name)),
             };
         }
     }

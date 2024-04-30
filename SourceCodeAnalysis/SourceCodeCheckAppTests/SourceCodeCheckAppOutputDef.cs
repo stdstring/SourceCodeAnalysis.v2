@@ -46,5 +46,9 @@ namespace SourceCodeCheckAppTests
         public const String AutoImplPropertiesAnalyzerSuccessOutput = $"Execution of {AutoImplPropertiesAnalyzer.Name} started\r\n" +
                                                                       "Found 0 auto implemented properties\r\n" +
                                                                       $"Execution of {AutoImplPropertiesAnalyzer.Name} finished\r\n";
+
+        public const String ExprBodiedMemberAnalyzerSuccessOutput = $"Execution of {ExprBodiedMemberAnalyzer.Name} started\r\n" +
+                                                                    "Found 0 expression-bodied members\r\n" +
+                                                                    $"Execution of {ExprBodiedMemberAnalyzer.Name} finished\r\n";
     }
 }

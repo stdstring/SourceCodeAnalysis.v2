@@ -49,7 +49,7 @@ namespace SourceCodeCheckApp.Analyzers
         private readonly IOutput _output;
         private readonly AnalyzerState _analyzerState;
 
-        private readonly String[] _errorCastTypes = new[]{"System.String"};
+        private readonly String[] _errorCastTypes = new[]{"string", "System.String"};
 
         private class CastToSameTypeDetector : CSharpSyntaxWalker
         {
@@ -74,7 +74,7 @@ namespace SourceCodeCheckApp.Analyzers
                         if ((type == null) || (expressionType == null))
                             throw new InvalidOperationException();
                         if (type.Equals(expressionType, SymbolEqualityComparer.Default))
-                            Data.Add(new AnalyzerData<String>(TypeData.Create(type).FullName, span));
+                            Data.Add(new AnalyzerData<String>(type.ToDisplayString(), span));
                         break;
                     }
                 }

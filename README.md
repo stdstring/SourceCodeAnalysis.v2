@@ -12,7 +12,7 @@
 1. implementation of analyzer for detecting (as error by default) C# 7.1 target-typed default literals **(implemented)**
 1. implementation of analyzer for detecting (as error by default) C# 7.0 out inline variables
 1. implementation of analyzer for detecting (as error by default) string interpolation expressions **(implemented)**
-1. implementation of analyzer for detecting (as error by default) expression-bodied members
+1. implementation of analyzer for detecting (as error by default) expression-bodied members **(implemented)**
 1. implementation of analyzer for detecting (as error by default) null-conditional operators
 1. implementation of analyzer for detecting (as error by default) auto-implemented properties **(implemented)**
 1. implementation of analyzer for detecting (as error by default) object initializer expressions **(implemented)**
@@ -77,6 +77,10 @@ Config file has the following form:
       <Name>SourceCodeCheckApp.Analyzers.AutoImplPropertiesAnalyzer</Name>
       <State>(On|ErrorAsWarning|Off)</State>
     </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
   </Analyzers>
 </Config>
 ```
@@ -90,3 +94,4 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer** analyzer find all target-typed default literals. All such literals are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.ObjectInitializerExprAnalyzer** analyzer find all object initializer expressions. All such expressions are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.AutoImplPropertiesAnalyzer** analyzer find all auto-implemented properties. All such properties are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer** analyzer find all expression-bodied members. All such members are considered as errors.
