@@ -16,7 +16,7 @@
 1. implementation of analyzer for detecting (as error by default) null-conditional operators
 1. implementation of analyzer for detecting (as error by default) auto-implemented properties **(implemented)**
 1. implementation of analyzer for detecting (as error by default) object initializer expressions **(implemented)**
-1. implementation of analyzer for detecting (as error by default) null-coalescing operators
+1. implementation of analyzer for detecting (as error by default) null-coalescing operators **(implemented)**
 1. implementation of analyzer for detecting (as error by default) chained assignments
 1. implementation of analyzer for detecting (as error by default) generic methods that call generic methods of successors
 1. implementation of analyzer for detecting (as error by default) explicit implementation of an interface in the some class with a private method of the same name
@@ -81,6 +81,10 @@ Config file has the following form:
       <Name>SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer</Name>
       <State>(On|ErrorAsWarning|Off)</State>
     </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.NullCoalescingOperatorAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
   </Analyzers>
 </Config>
 ```
@@ -95,3 +99,4 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.ObjectInitializerExprAnalyzer** analyzer find all object initializer expressions. All such expressions are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.AutoImplPropertiesAnalyzer** analyzer find all auto-implemented properties. All such properties are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer** analyzer find all expression-bodied members. All such members are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.NullCoalescingOperatorAnalyzer** analyzer find all null-coalescing operators. All such operators are considered as errors.

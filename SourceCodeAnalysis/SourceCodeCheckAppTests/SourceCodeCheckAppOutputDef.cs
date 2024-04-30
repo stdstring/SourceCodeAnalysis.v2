@@ -50,5 +50,9 @@ namespace SourceCodeCheckAppTests
         public const String ExprBodiedMemberAnalyzerSuccessOutput = $"Execution of {ExprBodiedMemberAnalyzer.Name} started\r\n" +
                                                                     "Found 0 expression-bodied members\r\n" +
                                                                     $"Execution of {ExprBodiedMemberAnalyzer.Name} finished\r\n";
+
+        public const String NullCoalescingOperatorAnalyzerSuccessOutput = $"Execution of {NullCoalescingOperatorAnalyzer.Name} started\r\n" +
+                                                                          "Found 0 null-coalescing operators\r\n" +
+                                                                          $"Execution of {NullCoalescingOperatorAnalyzer.Name} finished\r\n";
     }
 }

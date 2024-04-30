@@ -34,7 +34,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                                   "{0}(10): [ERROR]: Found expression-bodied method: SomeNamespace.SomeClass.SetValue(int)\r\n" +
                                                   "{0}(11): [ERROR]: Found expression-bodied method: SomeNamespace.SomeClass.GetValue()\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
-            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMembers", FilePath, OutputLevel.Error);
+            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMember", FilePath, OutputLevel.Error);
             analyzerHelper.Process(_analyzerOnFactory, false, expectedOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, "");
             analyzerHelper.Process(_analyzerOffFactory, true, "");
@@ -66,7 +66,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                                   "{0}(11): [{1}]: Found expression-bodied method: SomeNamespace.SomeClass.GetValue()\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
-            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMembers", FilePath, OutputLevel.Warning);
+            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMember", FilePath, OutputLevel.Warning);
             analyzerHelper.Process(_analyzerOnFactory, false, expectedOnOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, expectedWarningOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
@@ -101,7 +101,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                                   $"Execution of {ExprBodiedMemberAnalyzer.Name} finished\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
-            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMembers", FilePath, OutputLevel.Info);
+            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMember", FilePath, OutputLevel.Info);
             analyzerHelper.Process(_analyzerOnFactory, false, expectedOnOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, expectedWarningOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
@@ -134,7 +134,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        private int _value;\r\n" +
                                   "    }\r\n" +
                                   "}\r\n";
-            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMembers", FilePath, outputLevel);
+            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMember", FilePath, outputLevel);
             analyzerHelper.Process(_analyzerOnFactory, true, "");
             analyzerHelper.Process(_analyzerWarningFactory, true, "");
             analyzerHelper.Process(_analyzerOffFactory, true, "");
@@ -166,7 +166,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        private int _value;\r\n" +
                                   "    }\r\n" +
                                   "}\r\n";
-            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMembers", FilePath, OutputLevel.Info);
+            AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "ExprBodiedMember", FilePath, OutputLevel.Info);
             analyzerHelper.Process(_analyzerOnFactory, true, SourceCodeCheckAppOutputDef.ExprBodiedMemberAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, SourceCodeCheckAppOutputDef.ExprBodiedMemberAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
