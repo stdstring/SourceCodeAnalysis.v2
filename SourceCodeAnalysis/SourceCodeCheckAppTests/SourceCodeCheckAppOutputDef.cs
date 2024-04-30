@@ -54,5 +54,9 @@ namespace SourceCodeCheckAppTests
         public const String NullCoalescingOperatorAnalyzerSuccessOutput = $"Execution of {NullCoalescingOperatorAnalyzer.Name} started\r\n" +
                                                                           "Found 0 null-coalescing operators\r\n" +
                                                                           $"Execution of {NullCoalescingOperatorAnalyzer.Name} finished\r\n";
+
+        public const String NullConditionalOperatorAnalyzerSuccessOutput = $"Execution of {NullConditionalOperatorAnalyzer.Name} started\r\n" +
+                                                                           "Found 0 null-conditional operators\r\n" +
+                                                                           $"Execution of {NullConditionalOperatorAnalyzer.Name} finished\r\n";
     }
 }
