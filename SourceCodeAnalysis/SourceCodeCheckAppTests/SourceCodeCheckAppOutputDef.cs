@@ -62,5 +62,9 @@ namespace SourceCodeCheckAppTests
         public const String OutInlineVariableAnalyzerSuccessOutput = $"Execution of {OutInlineVariableAnalyzer.Name} started\r\n" +
                                                                      "Found 0 out inline variables\r\n" +
                                                                      $"Execution of {OutInlineVariableAnalyzer.Name} finished\r\n";
+
+        public const String ChainedAssignmentAnalyzerSuccessOutput = $"Execution of {ChainedAssignmentAnalyzer.Name} started\r\n" +
+                                                                     "Found 0 chained assignments\r\n" +
+                                                                     $"Execution of {ChainedAssignmentAnalyzer.Name} finished\r\n";
     }
 }

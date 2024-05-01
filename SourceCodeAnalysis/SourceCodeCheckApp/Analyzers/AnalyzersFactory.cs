@@ -21,7 +21,8 @@ namespace SourceCodeCheckApp.Analyzers
                 new ExprBodiedMemberAnalyzer(output, GetAnalyzerState(ExprBodiedMemberAnalyzer.Name)),
                 new NullCoalescingOperatorAnalyzer(output, GetAnalyzerState(NullCoalescingOperatorAnalyzer.Name)),
                 new NullConditionalOperatorAnalyzer(output, GetAnalyzerState(NullConditionalOperatorAnalyzer.Name)),
-                new OutInlineVariableAnalyzer(output, GetAnalyzerState(OutInlineVariableAnalyzer.Name))
+                new OutInlineVariableAnalyzer(output, GetAnalyzerState(OutInlineVariableAnalyzer.Name)),
+                new ChainedAssignmentAnalyzer(output, GetAnalyzerState(ChainedAssignmentAnalyzer.Name))
             };
         }
     }

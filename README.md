@@ -17,7 +17,7 @@
 1. implementation of analyzer for detecting (as error by default) auto-implemented properties **(implemented)**
 1. implementation of analyzer for detecting (as error by default) object initializer expressions **(implemented)**
 1. implementation of analyzer for detecting (as error by default) null-coalescing operators **(implemented)**
-1. implementation of analyzer for detecting (as error by default) chained assignments
+1. implementation of analyzer for detecting (as error by default) chained assignments **(implemented)**
 1. implementation of analyzer for detecting (as error by default) generic methods that call generic methods of successors
 1. implementation of analyzer for detecting (as error by default) explicit implementation of an interface in the some class with a private method of the same name
 
@@ -93,6 +93,10 @@ Config file has the following form:
       <Name>SourceCodeCheckApp.Analyzers.OutInlineVariableAnalyzer</Name>
       <State>(On|ErrorAsWarning|Off)</State>
     </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.ChainedAssignmentAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
   </Analyzers>
 </Config>
 ```
@@ -110,3 +114,4 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.NullCoalescingOperatorAnalyzer** analyzer find all null-coalescing operators. All such operators are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.NullConditionalOperatorAnalyzer** analyzer find all null-conditional operators. All such operators are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.OutInlineVariableAnalyzer** analyzer find out inline variables. All such variables are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.ChainedAssignmentAnalyzer** analyzer find chained assignment expressions. All such expressions are considered as errors.
