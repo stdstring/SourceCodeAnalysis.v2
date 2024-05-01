@@ -66,5 +66,9 @@ namespace SourceCodeCheckAppTests
         public const String ChainedAssignmentAnalyzerSuccessOutput = $"Execution of {ChainedAssignmentAnalyzer.Name} started\r\n" +
                                                                      "Found 0 chained assignments\r\n" +
                                                                      $"Execution of {ChainedAssignmentAnalyzer.Name} finished\r\n";
+
+        public const String ExplicitInterfaceMethodDuplicationAnalyzerSuccessOutput = $"Execution of {ExplicitInterfaceMethodDuplicationAnalyzer.Name} started\r\n" +
+                                                                                      "Found 0 explicit implementations of an interface with a private method of the same name\r\n" +
+                                                                                      $"Execution of {ExplicitInterfaceMethodDuplicationAnalyzer.Name} finished\r\n";
     }
 }

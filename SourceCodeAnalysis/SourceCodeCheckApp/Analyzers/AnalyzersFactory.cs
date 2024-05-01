@@ -22,7 +22,8 @@ namespace SourceCodeCheckApp.Analyzers
                 new NullCoalescingOperatorAnalyzer(output, GetAnalyzerState(NullCoalescingOperatorAnalyzer.Name)),
                 new NullConditionalOperatorAnalyzer(output, GetAnalyzerState(NullConditionalOperatorAnalyzer.Name)),
                 new OutInlineVariableAnalyzer(output, GetAnalyzerState(OutInlineVariableAnalyzer.Name)),
-                new ChainedAssignmentAnalyzer(output, GetAnalyzerState(ChainedAssignmentAnalyzer.Name))
+                new ChainedAssignmentAnalyzer(output, GetAnalyzerState(ChainedAssignmentAnalyzer.Name)),
+                new ExplicitInterfaceMethodDuplicationAnalyzer(output, GetAnalyzerState(ExplicitInterfaceMethodDuplicationAnalyzer.Name))
             };
         }
     }
