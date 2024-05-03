@@ -70,5 +70,9 @@ namespace SourceCodeCheckAppTests
         public const String ExplicitInterfaceMethodDuplicationAnalyzerSuccessOutput = $"Execution of {ExplicitInterfaceMethodDuplicationAnalyzer.Name} started\r\n" +
                                                                                       "Found 0 explicit implementations of an interface with a private method of the same name\r\n" +
                                                                                       $"Execution of {ExplicitInterfaceMethodDuplicationAnalyzer.Name} finished\r\n";
+
+        public const String SuccessorGenericMethodCallAnalyzerSuccessOutput = $"Execution of {SuccessorGenericMethodCallAnalyzer.Name} started\r\n" +
+                                                                              "Found 0 calls of generic methods of successors from generic method of ancestor\r\n" +
+                                                                              $"Execution of {SuccessorGenericMethodCallAnalyzer.Name} finished\r\n";
     }
 }
