@@ -3,39 +3,33 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class NullCoalescingOperatorAnalyzer : IFileAnalyzer
+    internal class NullCoalescingOperatorAnalyzer : SimpleAnalyzerBase<String>
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.NullCoalescingOperatorAnalyzer";
 
-        public NullCoalescingOperatorAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public NullCoalescingOperatorAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData<String>> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             NullCoalescingOperatorDetector detector = new NullCoalescingOperatorDetector();
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} null-coalescing operators");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData<String> entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, $"Found null-coalescing operator: \"{entry.Data}\"");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} null-coalescing operators";
+        }
+
+        protected override String CreateEntry(AnalyzerData<String> entry)
+        {
+            return $"Found null-coalescing operator: \"{entry.Data}\"";
+        }
 
         private class NullCoalescingOperatorDetector : CSharpSyntaxWalker
         {

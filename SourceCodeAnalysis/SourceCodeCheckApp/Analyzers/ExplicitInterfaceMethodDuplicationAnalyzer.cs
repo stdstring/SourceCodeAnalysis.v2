@@ -3,39 +3,33 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class ExplicitInterfaceMethodDuplicationAnalyzer : IFileAnalyzer
+    internal class ExplicitInterfaceMethodDuplicationAnalyzer : SimpleAnalyzerBase<String>
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.ExplicitInterfaceMethodDuplicationAnalyzer";
 
-        public ExplicitInterfaceMethodDuplicationAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public ExplicitInterfaceMethodDuplicationAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData<String>> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             ExplicitInterfaceMethodDuplicationDetector detector = new ExplicitInterfaceMethodDuplicationDetector(model);
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} explicit implementations of an interface with a private method of the same name");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData<String> entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, $"Found explicit implementation of an interface with a private method of the same name: {entry.Data}");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} explicit implementations of an interface with a private method of the same name";
+        }
+
+        protected override String CreateEntry(AnalyzerData<String> entry)
+        {
+            return $"Found explicit implementation of an interface with a private method of the same name: {entry.Data}";
+        }
 
         private class ExplicitInterfaceMethodDuplicationDetector : CSharpSyntaxWalker
         {

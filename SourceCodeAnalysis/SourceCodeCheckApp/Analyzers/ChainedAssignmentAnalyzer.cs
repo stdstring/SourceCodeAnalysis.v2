@@ -3,39 +3,33 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class ChainedAssignmentAnalyzer : IFileAnalyzer
+    internal class ChainedAssignmentAnalyzer : SimpleAnalyzerBase
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.ChainedAssignmentAnalyzer";
 
-        public ChainedAssignmentAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public ChainedAssignmentAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             ChainedAssignmentDetector detector = new ChainedAssignmentDetector();
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} chained assignments");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, "Found chained assignments");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} chained assignments";
+        }
+
+        protected override String CreateEntry(AnalyzerData entry)
+        {
+            return "Found chained assignments";
+        }
 
         private class ChainedAssignmentDetector : CSharpSyntaxWalker
         {

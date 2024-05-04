@@ -25,6 +25,8 @@
 
 1. implementation of  info collector about implementation of classes, methods, properties implementation in our implementation of system library
 1. implementation of analyzer for detecting (as warning by default) usage of classes, methods and properties which are absent or not implemented in the our implementation of system library
+1. implementation of support for ignored files via config file
+1. implementation of multiple sources support via config file
 
 
 ## Usage of app

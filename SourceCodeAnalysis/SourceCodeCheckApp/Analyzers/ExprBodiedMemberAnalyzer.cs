@@ -3,41 +3,35 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class ExprBodiedMemberAnalyzer : IFileAnalyzer
+    internal record MemberData(String Kind, String FullName);
+
+    internal class ExprBodiedMemberAnalyzer : SimpleAnalyzerBase<MemberData>
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer";
 
-        public ExprBodiedMemberAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public ExprBodiedMemberAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData<MemberData>> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             ExprBodiedMemberDetector detector = new ExprBodiedMemberDetector(model);
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} expression-bodied members");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData<MemberData> entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, $"Found expression-bodied {entry.Data.Kind}: {entry.Data.FullName}");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} expression-bodied members";
+        }
 
-        private record MemberData(String Kind, String FullName);
+        protected override String CreateEntry(AnalyzerData<MemberData> entry)
+        {
+            return $"Found expression-bodied {entry.Data.Kind}: {entry.Data.FullName}";
+        }
 
         private class ExprBodiedMemberDetector : CSharpSyntaxWalker
         {

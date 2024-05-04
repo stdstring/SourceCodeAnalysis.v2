@@ -3,41 +3,35 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class SuccessorGenericMethodCallAnalyzer : IFileAnalyzer
+    internal record CallData(String Caller, String Called);
+
+    internal class SuccessorGenericMethodCallAnalyzer : SimpleAnalyzerBase<CallData>
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.SuccessorGenericMethodCallAnalyzer";
 
-        public SuccessorGenericMethodCallAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public SuccessorGenericMethodCallAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData<CallData>> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             GenericMethodDetector detector = new GenericMethodDetector(model);
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} calls of generic methods of successors from generic method of ancestor");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData<CallData> entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, $"Found call of generic methods of successors \"{entry.Data.Called}\" from generic method of ancestor \"{entry.Data.Caller}\"");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} calls of generic methods of successors from generic method of ancestor";
+        }
 
-        private record CallData(String Caller, String Called);
+        protected override String CreateEntry(AnalyzerData<CallData> entry)
+        {
+            return $"Found call of generic methods of successors \"{entry.Data.Called}\" from generic method of ancestor \"{entry.Data.Caller}\"";
+        }
 
         private class GenericMethodDetector : CSharpSyntaxWalker
         {

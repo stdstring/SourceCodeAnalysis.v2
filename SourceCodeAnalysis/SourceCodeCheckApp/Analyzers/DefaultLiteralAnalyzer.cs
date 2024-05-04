@@ -3,39 +3,33 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using SourceCodeCheckApp.Config;
 using SourceCodeCheckApp.Output;
-using SourceCodeCheckApp.Utils;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class DefaultLiteralAnalyzer : IFileAnalyzer
+    internal class DefaultLiteralAnalyzer : SimpleAnalyzerBase
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer";
 
-        public DefaultLiteralAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public DefaultLiteralAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of {Name} started");
             DefaultLiteralDetector detector = new DefaultLiteralDetector();
-            detector.Visit(tree.GetRoot());
-            _output.WriteInfoLine($"Found {detector.Data.Count} target-typed default literals");
-            if (detector.Data.Count > 0)
-            {
-                foreach (AnalyzerData entry in detector.Data)
-                    _output.WriteErrorLine(filePath, entry.StartPosition.Line, "Found target-typed default literal");
-            }
-            _output.WriteInfoLine($"Execution of {Name} finished");
-            return (_analyzerState != AnalyzerState.On) || detector.Data.IsEmpty();
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateSummary(Int32 entryCount)
+        {
+            return $"Found {entryCount} target-typed default literals";
+        }
+
+        protected override String CreateEntry(AnalyzerData entry)
+        {
+            return "Found target-typed default literal";
+        }
 
         private class DefaultLiteralDetector : CSharpSyntaxWalker
         {
