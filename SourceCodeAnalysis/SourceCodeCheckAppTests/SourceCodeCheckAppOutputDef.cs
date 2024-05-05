@@ -12,7 +12,8 @@ namespace SourceCodeCheckAppTests
         public const String AppDescription = "Application usage:\r\n" +
                                              "1. <app> --config=<path to config file>\r\n" +
                                              "2. <app> --help\r\n" +
-                                             "3. <app> --version\r\n";
+                                             "3. <app> --version\r\n" +
+                                             "4. <app> --info\r\n";
 
         public const String CompilationCheckSuccessOutput = "Checking compilation for errors and warnings:\r\n" +
                                                             "Found 0 errors in the compilation\r\n" +
@@ -27,8 +28,8 @@ namespace SourceCodeCheckAppTests
                                                                    $"Execution of {BadFilenameCaseAnalyzer.Name} finished\r\n";
 
         public const String CastToSameTypeAnalyzerSuccessOutput = $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                                  "Found 0 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                                  "Found 0 casts to the same type not leading to errors\r\n" +
                                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n";
 
         public const String ChainedAssignmentAnalyzerSuccessOutput = $"Execution of {ChainedAssignmentAnalyzer.Name} started\r\n" +
@@ -52,7 +53,7 @@ namespace SourceCodeCheckAppTests
                                                               $"Execution of {NameOfExprAnalyzer.Name} finished\r\n";
 
         public const String NonAsciiIdentifiersAnalyzerSuccessOutput = $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
-                                                                       "Found 0 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
+                                                                       "Found 0 non-ASCII identifiers\r\n" +
                                                                        $"Execution of {NonAsciiIdentifiersAnalyzer.Name} finished\r\n";
 
         public const String NullCoalescingOperatorAnalyzerSuccessOutput = $"Execution of {NullCoalescingOperatorAnalyzer.Name} started\r\n" +

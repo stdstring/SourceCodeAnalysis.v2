@@ -10,7 +10,10 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.ExplicitInterfaceMethodDuplicationAnalyzer";
 
-        public ExplicitInterfaceMethodDuplicationAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds explicit implementations of an interface in the some class when this some class also contains a private methods of the same name. " +
+                                          "All such implementations are considered as errors.";
+
+        public ExplicitInterfaceMethodDuplicationAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

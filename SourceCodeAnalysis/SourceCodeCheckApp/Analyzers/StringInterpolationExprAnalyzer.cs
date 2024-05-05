@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.StringInterpolationExprAnalyzer";
 
-        public StringInterpolationExprAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds all string interpolation expressions. All such expressions are considered as errors.";
+
+        public StringInterpolationExprAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

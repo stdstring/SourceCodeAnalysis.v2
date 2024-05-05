@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.NameOfExprAnalyzer";
 
-        public NameOfExprAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds nameof expressions. All such expressions are considered as errors.";
+
+        public NameOfExprAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

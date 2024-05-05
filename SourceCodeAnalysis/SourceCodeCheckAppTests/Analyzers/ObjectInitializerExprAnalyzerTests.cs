@@ -333,6 +333,16 @@ namespace SourceCodeCheckAppTests.Analyzers
             analyzerHelper.Process(_analyzerOffFactory, true, "");
         }
 
+        [Test]
+        public void CheckAnalyzerInfo()
+        {
+            AnalyzerInfo expectedInfo = new AnalyzerInfo(ObjectInitializerExprAnalyzer.Name, ObjectInitializerExprAnalyzer.Description);
+            IOutput nullOutput = new NullOutput();
+            Assert.That(_analyzerOnFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerWarningFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerOffFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+        }
+
         private readonly Func<IOutput, IFileAnalyzer> _analyzerOnFactory = output => new ObjectInitializerExprAnalyzer(output, AnalyzerState.On);
         private readonly Func<IOutput, IFileAnalyzer> _analyzerWarningFactory = output => new ObjectInitializerExprAnalyzer(output, AnalyzerState.ErrorAsWarning);
         private readonly Func<IOutput, IFileAnalyzer> _analyzerOffFactory = output => new ObjectInitializerExprAnalyzer(output, AnalyzerState.Off);

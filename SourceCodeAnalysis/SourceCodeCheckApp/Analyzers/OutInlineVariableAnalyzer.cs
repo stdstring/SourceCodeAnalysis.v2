@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.OutInlineVariableAnalyzer";
 
-        public OutInlineVariableAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds out inline variables. All such variables are considered as errors.";
+
+        public OutInlineVariableAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

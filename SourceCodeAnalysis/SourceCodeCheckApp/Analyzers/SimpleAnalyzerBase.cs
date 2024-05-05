@@ -7,11 +7,12 @@ namespace SourceCodeCheckApp.Analyzers
 {
     internal abstract class SimpleAnalyzerBase : IFileAnalyzer
     {
-        public SimpleAnalyzerBase(IOutput output, AnalyzerState analyzerState, String name)
+        public SimpleAnalyzerBase(IOutput output, AnalyzerState analyzerState, String name, String description)
         {
             _output = new AnalyserOutputWrapper(output, analyzerState);
             _analyzerState = analyzerState;
             _name = name;
+            AnalyzerInfo = new AnalyzerInfo(name, description);
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
@@ -27,6 +28,8 @@ namespace SourceCodeCheckApp.Analyzers
             return (_analyzerState != AnalyzerState.On) || entries.IsEmpty();
         }
 
+        public AnalyzerInfo AnalyzerInfo { get; init; }
+
         protected abstract IList<AnalyzerData> Detect(SyntaxNode node, SemanticModel model);
 
         protected abstract String CreateSummary(Int32 entryCount);
@@ -40,11 +43,12 @@ namespace SourceCodeCheckApp.Analyzers
 
     internal abstract class SimpleAnalyzerBase<T> : IFileAnalyzer
     {
-        public SimpleAnalyzerBase(IOutput output, AnalyzerState analyzerState, String name)
+        public SimpleAnalyzerBase(IOutput output, AnalyzerState analyzerState, String name, String description)
         {
             _output = new AnalyserOutputWrapper(output, analyzerState);
             _analyzerState = analyzerState;
             _name = name;
+            AnalyzerInfo = new AnalyzerInfo(name, description);
         }
 
         public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
@@ -59,6 +63,8 @@ namespace SourceCodeCheckApp.Analyzers
             _output.WriteInfoLine($"Execution of {_name} finished");
             return (_analyzerState != AnalyzerState.On) || entries.IsEmpty();
         }
+
+        public AnalyzerInfo AnalyzerInfo { get; init; }
 
         protected abstract IList<AnalyzerData<T>> Detect(SyntaxNode node, SemanticModel model);
 

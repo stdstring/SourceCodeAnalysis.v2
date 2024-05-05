@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer";
 
-        public DefaultLiteralAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds all target-typed default literals. All such literals are considered as errors.";
+
+        public DefaultLiteralAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

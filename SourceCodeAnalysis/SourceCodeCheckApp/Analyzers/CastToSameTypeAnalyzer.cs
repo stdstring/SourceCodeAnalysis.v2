@@ -10,6 +10,8 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.CastToSameTypeAnalyzer";
 
+        public const String Description = "This analyzer finds cast expression with type `T` to the same type `T`. Some casts are considered as errors (e.g. cast to `string`), other - as warnings.";
+
         public CastToSameTypeAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
             _output = new AnalyserOutputWrapper(output, analyzerState);
@@ -29,10 +31,12 @@ namespace SourceCodeCheckApp.Analyzers
             return (_analyzerState != AnalyzerState.On) || !hasErrors;
         }
 
+        public AnalyzerInfo AnalyzerInfo { get; } = new AnalyzerInfo(Name, Description);
+
         private Boolean ProcessErrors(String filePath, IList<AnalyzerData<String>> data)
         {
             IList<AnalyzerData<String>> errors = data.Where(item => _errorCastTypes.Contains(item.Data)).ToList();
-            _output.WriteInfoLine($"Found {errors.Count} casts leading to errors in the ported C++ code");
+            _output.WriteInfoLine($"Found {errors.Count} casts to the same type leading to errors");
             foreach (AnalyzerData<String> error in errors)
                 _output.WriteErrorLine(filePath, error.StartPosition.Line, $"Found cast to the same type \"{error.Data}\"");
             return errors.Count > 0;
@@ -41,7 +45,7 @@ namespace SourceCodeCheckApp.Analyzers
         private void ProcessWarnings(String filePath, IList<AnalyzerData<String>> data)
         {
             IList<AnalyzerData<String>> warnings = data.Where(item => !_errorCastTypes.Contains(item.Data)).ToList();
-            _output.WriteInfoLine($"Found {warnings.Count} casts to the same type not leading to errors in the ported C++ code");
+            _output.WriteInfoLine($"Found {warnings.Count} casts to the same type not leading to errors");
             foreach (AnalyzerData<String> warning in warnings)
                 _output.WriteWarningLine(filePath, warning.StartPosition.Line, $"Found cast to the same type \"{warning.Data}\"");
         }

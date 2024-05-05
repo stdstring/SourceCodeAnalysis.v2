@@ -12,7 +12,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.SuccessorGenericMethodCallAnalyzer";
 
-        public SuccessorGenericMethodCallAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds calls of generic methods of successors from generic methods of ancestors. All such calls are considered as errors.";
+
+        public SuccessorGenericMethodCallAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

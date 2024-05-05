@@ -24,8 +24,8 @@ namespace SourceCodeCheckApp.Analyzers
                 new NullConditionalOperatorAnalyzer(output, GetAnalyzerState(NullConditionalOperatorAnalyzer.Name)),
                 new ObjectInitializerExprAnalyzer(output, GetAnalyzerState(ObjectInitializerExprAnalyzer.Name)),
                 new OutInlineVariableAnalyzer(output, GetAnalyzerState(OutInlineVariableAnalyzer.Name)),
-                new SuccessorGenericMethodCallAnalyzer(output, GetAnalyzerState(SuccessorGenericMethodCallAnalyzer.Name)),
-                new StringInterpolationExprAnalyzer(output, GetAnalyzerState(StringInterpolationExprAnalyzer.Name))
+                new StringInterpolationExprAnalyzer(output, GetAnalyzerState(StringInterpolationExprAnalyzer.Name)),
+                new SuccessorGenericMethodCallAnalyzer(output, GetAnalyzerState(SuccessorGenericMethodCallAnalyzer.Name))
             };
         }
     }

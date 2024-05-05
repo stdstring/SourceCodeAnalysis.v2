@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.NullCoalescingOperatorAnalyzer";
 
-        public NullCoalescingOperatorAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds all null-coalescing operators. All such operators are considered as errors.";
+
+        public NullCoalescingOperatorAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

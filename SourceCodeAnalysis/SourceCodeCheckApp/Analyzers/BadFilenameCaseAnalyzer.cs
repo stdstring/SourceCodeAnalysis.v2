@@ -10,6 +10,11 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.BadFilenameCaseAnalyzer";
 
+        public const String Description = "This analyzer checks if file has the type with name that match the filename without extension. " +
+                                          "If there is no such type, but there are types with names which mismatch by letter case only, than such situation are considered as error. " +
+                                          "If file contains type, which matches by name and types which mismatch by letter case only, than such situation are considered as warning. " +
+                                          "If file contains only types which mismatch by name, than such situation are considered as warning.";
+
         public BadFilenameCaseAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
             _output = new AnalyserOutputWrapper(output, analyzerState);
@@ -27,6 +32,8 @@ namespace SourceCodeCheckApp.Analyzers
             _output.WriteInfoLine($"Execution of {Name} finished");
             return (_analyzerState != AnalyzerState.On) || result;
         }
+
+        public AnalyzerInfo AnalyzerInfo { get; } = new AnalyzerInfo(Name, Description);
 
         private Boolean Process(String filePath, IList<AnalyzerData<SimpleTypeData>> data)
         {

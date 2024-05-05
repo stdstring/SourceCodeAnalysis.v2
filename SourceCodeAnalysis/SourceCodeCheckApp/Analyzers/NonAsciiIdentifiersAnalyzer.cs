@@ -10,7 +10,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer";
 
-        public NonAsciiIdentifiersAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds all identifiers with non ASCII characters in their names. All such identifiers are considered as errors.";
+
+        public NonAsciiIdentifiersAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 
@@ -24,7 +26,7 @@ namespace SourceCodeCheckApp.Analyzers
 
         protected override String CreateSummary(Int32 entryCount)
         {
-            return $"Found {entryCount} non-ASCII identifiers leading to errors in the ported C++ code";
+            return $"Found {entryCount} non-ASCII identifiers";
         }
 
         protected override String CreateEntry(AnalyzerData<String> entry)

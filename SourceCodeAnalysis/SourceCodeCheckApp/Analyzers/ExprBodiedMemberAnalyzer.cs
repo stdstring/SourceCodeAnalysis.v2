@@ -12,7 +12,9 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.ExprBodiedMemberAnalyzer";
 
-        public ExprBodiedMemberAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name)
+        public const String Description = "This analyzer finds all expression-bodied members. All such members are considered as errors.";
+
+        public ExprBodiedMemberAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
         }
 

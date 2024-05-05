@@ -33,7 +33,60 @@ namespace SourceCodeCheckAppTests
         public void ProcessVersion()
         {
             ExecutionResult executionResult = ExecutionHelper.Execute("--version");
-            ExecutionChecker.Check(executionResult, 0, "0.0.1", "");
+            ExecutionChecker.Check(executionResult, 0, "0.0.2", "");
+        }
+
+        [Test]
+        public void ProcessInfo()
+        {
+            ExecutionResult executionResult = ExecutionHelper.Execute("--info");
+            const String expectedOutput = "Known analyzers:\r\n" +
+                                          "\r\n" +
+                                          $"Name: {AutoImplPropertiesAnalyzer.Name}\r\n" +
+                                          $"{AutoImplPropertiesAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {BadFilenameCaseAnalyzer.Name}\r\n" +
+                                          $"{BadFilenameCaseAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {CastToSameTypeAnalyzer.Name}\r\n" +
+                                          $"{CastToSameTypeAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {ChainedAssignmentAnalyzer.Name}\r\n" +
+                                          $"{ChainedAssignmentAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {DefaultLiteralAnalyzer.Name}\r\n" +
+                                          $"{DefaultLiteralAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {ExplicitInterfaceMethodDuplicationAnalyzer.Name}\r\n" +
+                                          $"{ExplicitInterfaceMethodDuplicationAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {ExprBodiedMemberAnalyzer.Name}\r\n" +
+                                          $"{ExprBodiedMemberAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {NameOfExprAnalyzer.Name}\r\n" +
+                                          $"{NameOfExprAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {NonAsciiIdentifiersAnalyzer.Name}\r\n" +
+                                          $"{NonAsciiIdentifiersAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {NullCoalescingOperatorAnalyzer.Name}\r\n" +
+                                          $"{NullCoalescingOperatorAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {NullConditionalOperatorAnalyzer.Name}\r\n" +
+                                          $"{NullConditionalOperatorAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {ObjectInitializerExprAnalyzer.Name}\r\n" +
+                                          $"{ObjectInitializerExprAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {OutInlineVariableAnalyzer.Name}\r\n" +
+                                          $"{OutInlineVariableAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {StringInterpolationExprAnalyzer.Name}\r\n" +
+                                          $"{StringInterpolationExprAnalyzer.Description}\r\n" +
+                                          "\r\n" +
+                                          $"Name: {SuccessorGenericMethodCallAnalyzer.Name}\r\n" +
+                                          $"{SuccessorGenericMethodCallAnalyzer.Description}";
+            ExecutionChecker.Check(executionResult, 0, expectedOutput, "");
         }
 
         [TestCase("--some-strange-option")]
@@ -111,8 +164,8 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -223,8 +276,8 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -316,9 +369,9 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 1 casts leading to errors in the ported C++ code\r\n" +
+                                                  "Found 1 casts to the same type leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -337,7 +390,7 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   SourceCodeCheckAppOutputDef.CastToSameTypeAnalyzerSuccessOutput +
                                                   $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
-                                                  "Found 14 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
+                                                  "Found 14 non-ASCII identifiers\r\n" +
                                                   "{1}\\IdentifiersExample.cs(5): [ERROR]: Found non-ASCII identifier \"SоmeSimpleClassA\"\r\n" +
                                                   "{1}\\IdentifiersExample.cs(13): [ERROR]: Found non-ASCII identifier \"TPаrаm1\"\r\n" +
                                                   "{1}\\IdentifiersExample.cs(17): [ERROR]: Found non-ASCII identifier \"ISomеInterface\"\r\n" +
@@ -452,9 +505,9 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 1 casts leading to errors in the ported C++ code\r\n" +
+                                                  "Found 1 casts to the same type leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -552,9 +605,9 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 1 casts leading to errors in the ported C++ code\r\n" +
+                                                  "Found 1 casts to the same type leading to errors\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(22): [ERROR]: Found cast to the same type \"string\"\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -573,7 +626,7 @@ namespace SourceCodeCheckAppTests
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   SourceCodeCheckAppOutputDef.CastToSameTypeAnalyzerSuccessOutput +
                                                   $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
-                                                  "Found 14 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
+                                                  "Found 14 non-ASCII identifiers\r\n" +
                                                   "{1}\\BadExample\\IdentifiersExample.cs(5): [ERROR]: Found non-ASCII identifier \"SоmeSimpleClassA\"\r\n" +
                                                   "{1}\\BadExample\\IdentifiersExample.cs(13): [ERROR]: Found non-ASCII identifier \"TPаrаm1\"\r\n" +
                                                   "{1}\\BadExample\\IdentifiersExample.cs(17): [ERROR]: Found non-ASCII identifier \"ISomеInterface\"\r\n" +
@@ -599,8 +652,8 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\GoodExample\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -749,9 +802,9 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\BadExample\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 1 casts leading to errors in the ported C++ code\r\n" +
+                                                  "Found 1 casts to the same type leading to errors\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(22): [WARNING]: Found cast to the same type \"string\"\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\BadExample\\CastsExample.cs(25): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +
@@ -777,8 +830,8 @@ namespace SourceCodeCheckAppTests
                                                   "Processing of the file {1}\\GoodExample\\CastsExample.cs is started\r\n" +
                                                   SourceCodeCheckAppOutputDef.BadFilenameCaseAnalyzerSuccessOutput +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
-                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                  "Found 2 casts to the same type not leading to errors in the ported C++ code\r\n" +
+                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                  "Found 2 casts to the same type not leading to errors\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(20): [WARNING]: Found cast to the same type \"int\"\r\n" +
                                                   "{1}\\GoodExample\\CastsExample.cs(24): [WARNING]: Found cast to the same type \"SomeBaseLibrary.SomeBaseClass\"\r\n" +
                                                   $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n" +

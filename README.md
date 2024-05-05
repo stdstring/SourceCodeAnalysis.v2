@@ -5,7 +5,7 @@
 1. implementation of version of SourceCodeAnalysis app on .NET 8.0 **(implemented)**
 1. implementation of app configuring via config file in XML format **(implemented)**
 1. implementation of manage different analyzers via config file **(implemented)**
-1. implementation of retrieving info about all known analyzers for app via special key in CLI
+1. implementation of retrieving info about all known analyzers for app via special key in CLI **(implemented)**
 
 ## Phase 1
 
@@ -40,6 +40,11 @@
 ```
 <app> --version
 ```
+#### show info about known analyzers:
+```
+<app> --info
+```
+
 #### run analysis:
 ```
 <app> --config=<path-to_config>
@@ -120,7 +125,7 @@ Config file has the following form:
 
 1. **SourceCodeCheckApp.Analyzers.BadFilenameCaseAnalyzer** analyzer checks if file has the type with name that match the filename without extension. If there is no such type, but there are types with names which mismatch by letter case only, than such situation are considered as error. If file contains type, which matches by name and types which mismatch by letter case only, than such situation are considered as warning. If file contains only types which mismatch by name, than such situation are considered as warning.
 1. **SourceCodeCheckApp.Analyzers.CastToSameTypeAnalyzer** analyzer finds cast expression with type `T` to the same type `T`. Some casts are considered as errors (e.g. cast to `string`), other - as warnings.
-1. **SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer** analyzer finds all identifiers with non ASCII letters in their names. All such identifiers are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer** analyzer finds all identifiers with non ASCII characters in their names. All such identifiers are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.StringInterpolationExprAnalyzer** analyzer finds all string interpolation expressions. All such expressions are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.DefaultLiteralAnalyzer** analyzer finds all target-typed default literals. All such literals are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.ObjectInitializerExprAnalyzer** analyzer finds all object initializer expressions. All such expressions are considered as errors.
@@ -130,6 +135,6 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.NullConditionalOperatorAnalyzer** analyzer finds all null-conditional operators. All such operators are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.OutInlineVariableAnalyzer** analyzer finds out inline variables. All such variables are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.ChainedAssignmentAnalyzer** analyzer finds chained assignment expressions. All such expressions are considered as errors.
-1. **SourceCodeCheckApp.Analyzers.ExplicitInterfaceMethodDuplicationAnalyzer** analyzer finds explicit implementations of an interface in the some class with a private methods of the same name. All such implementations are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.ExplicitInterfaceMethodDuplicationAnalyzer** analyzer finds explicit implementations of an interface in the some class when this some class also contains a private methods of the same name. All such implementations are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.SuccessorGenericMethodCallAnalyzer** analyzer finds calls of generic methods of successors from generic methods of ancestors. All such calls are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.NameOfExprAnalyzer** analyzer finds nameof expressions. All such expressions are considered as errors.
