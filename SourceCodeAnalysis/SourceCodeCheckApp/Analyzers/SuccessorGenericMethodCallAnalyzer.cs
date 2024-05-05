@@ -78,6 +78,9 @@ namespace SourceCodeCheckApp.Analyzers
                 SymbolInfo symbol = _model.GetSymbolInfo(node);
                 switch (symbol.Symbol)
                 {
+                    // nameof expression isn't error
+                    case null when node.Expression is IdentifierNameSyntax{Identifier.Text: "nameof"}:
+                        break;
                     case null:
                         throw new InvalidOperationException($"Bad invocation symbol info for {_caller}");
                     case IMethodSymbol {IsGenericMethod: true, ContainingType: var containingType} methodSymbol:

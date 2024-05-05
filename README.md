@@ -20,6 +20,7 @@
 1. implementation of analyzer for detecting (as error by default) chained assignments **(implemented)**
 1. implementation of analyzer for detecting (as error by default) generic methods that call generic methods of successors **(implemented)**
 1. implementation of analyzer for detecting (as error by default) explicit implementation of an interface in the some class with a private method of the same name **(implemented)**
+1. implementation of analyzer for detecting nameof expressions **(implemented)**
 
 ## Phase 2
 
@@ -107,6 +108,10 @@ Config file has the following form:
       <Name>SourceCodeCheckApp.Analyzers.SuccessorGenericMethodCallAnalyzer</Name>
       <State>(On|ErrorAsWarning|Off)</State>
     </Analyzer>
+    <Analyzer>
+      <Name>SourceCodeCheckApp.Analyzers.NameOfExprAnalyzer</Name>
+      <State>(On|ErrorAsWarning|Off)</State>
+    </Analyzer>
   </Analyzers>
 </Config>
 ```
@@ -127,3 +132,4 @@ Config file has the following form:
 1. **SourceCodeCheckApp.Analyzers.ChainedAssignmentAnalyzer** analyzer finds chained assignment expressions. All such expressions are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.ExplicitInterfaceMethodDuplicationAnalyzer** analyzer finds explicit implementations of an interface in the some class with a private methods of the same name. All such implementations are considered as errors.
 1. **SourceCodeCheckApp.Analyzers.SuccessorGenericMethodCallAnalyzer** analyzer finds calls of generic methods of successors from generic methods of ancestors. All such calls are considered as errors.
+1. **SourceCodeCheckApp.Analyzers.NameOfExprAnalyzer** analyzer finds nameof expressions. All such expressions are considered as errors.
