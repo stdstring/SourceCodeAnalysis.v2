@@ -1,4 +1,6 @@
-# SourceCodeAnalysis.v2
+# SourceCodeAnalysis project
+
+Source code analysis tool intended for checking used constructions of source code before porting from C# into another languages: C++, Python etc
 
 ## Phase 0
 
