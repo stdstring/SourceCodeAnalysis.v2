@@ -21,8 +21,8 @@ namespace SourceCodeCheckApp.Processors
         private static readonly IDictionary<String, Func<String, IOutput, ISourceProcessor>> ProcessorsMap = new Dictionary<String, Func<String, IOutput, ISourceProcessor>>
         {
             {".sln", (source, output) => new SolutionProcessor(source, output)},
-            {".csproj", (source, output) => new ProjectProcessor(source, output)},
-            {".cs", (source, output) => new FileProcessor(source, output)}
+            {".csproj", (source, output) => new ProjectProcessor(source, output)}
+            //{".cs", (source, output) => new FileProcessor(source, output)}
         };
     }
 }

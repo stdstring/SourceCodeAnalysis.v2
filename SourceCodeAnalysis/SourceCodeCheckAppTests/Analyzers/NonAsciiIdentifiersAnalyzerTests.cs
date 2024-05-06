@@ -99,8 +99,8 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of NonAsciiIdentifiersAnalyzer started\r\n" +
-                                                  "Found 9 non-ASCII identifiers leading to errors in the ported C++ code\r\n" +
+            const String expectedOutputTemplate = $"Execution of {NonAsciiIdentifiersAnalyzer.Name} started\r\n" +
+                                                  "Found 9 non-ASCII identifiers\r\n" +
                                                   "{0}(1): [{1}]: Found non-ASCII identifier \"SomeНеймспейс\"\r\n" +
                                                   "{0}(3): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
                                                   "{0}(6): [{1}]: Found non-ASCII identifier \"SomeКласс\"\r\n" +
@@ -110,7 +110,7 @@ namespace SourceCodeCheckAppTests.Analyzers
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"другойObj\"\r\n" +
                                                   "{0}(13): [{1}]: Found non-ASCII identifier \"ДругойClass\"\r\n" +
-                                                  "Execution of NonAsciiIdentifiersAnalyzer finished\r\n";
+                                                  $"Execution of {NonAsciiIdentifiersAnalyzer.Name} finished\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "NonAsciiIdentifiers", FilePath, OutputLevel.Info);
@@ -168,6 +168,16 @@ namespace SourceCodeCheckAppTests.Analyzers
             analyzerHelper.Process(_analyzerOnFactory, true, SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, SourceCodeCheckAppOutputDef.NonAsciiIdentifiersAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
+        }
+
+        [Test]
+        public void CheckAnalyzerInfo()
+        {
+            AnalyzerInfo expectedInfo = new AnalyzerInfo(NonAsciiIdentifiersAnalyzer.Name, NonAsciiIdentifiersAnalyzer.Description);
+            IOutput nullOutput = new NullOutput();
+            Assert.That(_analyzerOnFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerWarningFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerOffFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
         }
 
         private readonly Func<IOutput, IFileAnalyzer> _analyzerOnFactory = output => new NonAsciiIdentifiersAnalyzer(output, AnalyzerState.On);

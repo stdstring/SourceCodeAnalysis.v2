@@ -130,11 +130,11 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "    {\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of BadFilenameCaseAnalyzer started\r\n" +
+            const String expectedOutputTemplate = $"Execution of {BadFilenameCaseAnalyzer.Name} started\r\n" +
                                                   "File contains 2 types with names match to the filename with ignoring case\r\n" +
                                                   "{0}(9): [WARNING]: Found type named \"SomeNamespace.SOmeClass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
                                                   "{0}(12): [WARNING]: Found type named \"SomeNamespace.Someclass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
-                                                  "Execution of BadFilenameCaseAnalyzer finished\r\n";
+                                                  $"Execution of {BadFilenameCaseAnalyzer.Name} finished\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "BadFilenameCase", FilePath, OutputLevel.Info);
             analyzerHelper.Process(_analyzerOnFactory, true, expectedOutput);
@@ -226,12 +226,12 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "    {\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of BadFilenameCaseAnalyzer started\r\n" +
-                                          "File doesn't contain any type with name exact match to the filename, but contains 3 types with names match to the filename with ignoring case\r\n" +
-                                          "{0}(6): [{1}]: Found type named \"SomeNamespace.SoMeClass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
-                                          "{0}(9): [{1}]: Found type named \"SomeNamespace.SOmeClass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
-                                          "{0}(12): [{1}]: Found type named \"SomeNamespace.Someclass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
-                                          "Execution of BadFilenameCaseAnalyzer finished\r\n";
+            const String expectedOutputTemplate = $"Execution of {BadFilenameCaseAnalyzer.Name} started\r\n" +
+                                                  "File doesn't contain any type with name exact match to the filename, but contains 3 types with names match to the filename with ignoring case\r\n" +
+                                                  "{0}(6): [{1}]: Found type named \"SomeNamespace.SoMeClass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
+                                                  "{0}(9): [{1}]: Found type named \"SomeNamespace.SOmeClass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
+                                                  "{0}(12): [{1}]: Found type named \"SomeNamespace.Someclass\" which corresponds the filename \"SomeClass.cs\" only at ignoring case\r\n" +
+                                                  $"Execution of {BadFilenameCaseAnalyzer.Name} finished\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "BadFilenameCase", FilePath, OutputLevel.Info);
@@ -290,14 +290,24 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "    {\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of BadFilenameCaseAnalyzer started\r\n" +
+            const String expectedOutputTemplate = $"Execution of {BadFilenameCaseAnalyzer.Name} started\r\n" +
                                                   "{0}(1): [WARNING]: File doesn't contain any types with names corresponding to the name of this file\r\n" +
-                                                  "Execution of BadFilenameCaseAnalyzer finished\r\n";
+                                                  $"Execution of {BadFilenameCaseAnalyzer.Name} finished\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "BadFilenameCase", FilePath, OutputLevel.Info);
             analyzerHelper.Process(_analyzerOnFactory, true, expectedOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, expectedOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
+        }
+
+        [Test]
+        public void CheckAnalyzerInfo()
+        {
+            AnalyzerInfo expectedInfo = new AnalyzerInfo(BadFilenameCaseAnalyzer.Name, BadFilenameCaseAnalyzer.Description);
+            IOutput nullOutput = new NullOutput();
+            Assert.That(_analyzerOnFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerWarningFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerOffFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
         }
 
         private readonly Func<IOutput, IFileAnalyzer> _analyzerOnFactory = output => new BadFilenameCaseAnalyzer(output, AnalyzerState.On);

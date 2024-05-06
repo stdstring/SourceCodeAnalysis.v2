@@ -6,39 +6,33 @@ using SourceCodeCheckApp.Output;
 
 namespace SourceCodeCheckApp.Analyzers
 {
-    internal class NonAsciiIdentifiersAnalyzer : IFileAnalyzer
+    internal class NonAsciiIdentifiersAnalyzer : SimpleAnalyzerBase<String>
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.NonAsciiIdentifiersAnalyzer";
 
-        public NonAsciiIdentifiersAnalyzer(IOutput output, AnalyzerState analyzerState)
+        public const String Description = "This analyzer finds all identifiers with non ASCII characters in their names. All such identifiers are considered as errors.";
+
+        public NonAsciiIdentifiersAnalyzer(IOutput output, AnalyzerState analyzerState) : base(output, analyzerState, Name, Description)
         {
-            _output = new AnalyserOutputWrapper(output, analyzerState);
-            _analyzerState = analyzerState;
         }
 
-        public Boolean Process(String filePath, SyntaxTree tree, SemanticModel model)
+        protected override IList<AnalyzerData<String>> Detect(SyntaxNode node, SemanticModel model)
         {
-            if (_analyzerState == AnalyzerState.Off)
-                return true;
-            _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer started");
             Regex identifierRegex = new Regex("^[a-zA-Z0-9_]+$");
             NonConsistentIdentifiersDetector detector = new NonConsistentIdentifiersDetector(identifierRegex);
-            detector.Visit(tree.GetRoot());
-            Boolean hasErrors = ProcessErrors(filePath, detector.Data);
-            _output.WriteInfoLine($"Execution of NonAsciiIdentifiersAnalyzer finished");
-            return (_analyzerState != AnalyzerState.On) || !hasErrors;
+            detector.Visit(node);
+            return detector.Data;
         }
 
-        private Boolean ProcessErrors(String filePath, IList<AnalyzerData<String>> errors)
+        protected override String CreateSummary(Int32 entryCount)
         {
-            _output.WriteInfoLine($"Found {errors.Count} non-ASCII identifiers leading to errors in the ported C++ code");
-            foreach (AnalyzerData<String> error in errors)
-                _output.WriteErrorLine(filePath, error.StartPosition.Line, $"Found non-ASCII identifier \"{error.Data}\"");
-            return errors.Count > 0;
+            return $"Found {entryCount} non-ASCII identifiers";
         }
 
-        private readonly IOutput _output;
-        private readonly AnalyzerState _analyzerState;
+        protected override String CreateEntry(AnalyzerData<String> entry)
+        {
+            return $"Found non-ASCII identifier \"{entry.Data}\"";
+        }
 
         private class NonConsistentIdentifiersDetector : CSharpSyntaxWalker
         {

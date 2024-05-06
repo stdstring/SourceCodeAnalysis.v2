@@ -34,22 +34,43 @@ namespace SourceCodeCheckApp
                 case AppArgsResult.HelpConfig {Help: var help}:
                     Console.WriteLine(help);
                     return true;
+                case AppArgsResult.AnalyzerInfoConfig:
+                    return ShowAnalyzerInfo();
                 case AppArgsResult.WrongConfig {Help: var help, Reason: var reason}:
                     Console.Error.WriteLine($"[ERROR]: {reason}");
                     Console.WriteLine(help);
                     return false;
                 case AppArgsResult.MainConfig mainConfig:
-                    AppConfig appConfig = AppConfigFactory.Create(mainConfig);
-                    IOutput output = new OutputImpl(Console.Out, Console.Error, appConfig.Config.BaseConfig!.OutputLevel);
-                    PrerequisitesManager.Run();
-                    ISourceProcessor processor = SourceProcessorFactory.Create(appConfig.Config.BaseConfig.Source!, output);
-                    IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(output, appConfig.Config.Analyzers ?? Array.Empty<AnalyzerEntry>());
-                    Boolean processResult = processor.Process(analyzers);
-                    output.WriteInfoLine($"Result of analysis: analysis is {(processResult ? "succeeded" : "failed")}");
-                    return processResult;
+                    return ProcessCheck(mainConfig);
                 default:
                     throw new InvalidOperationException("Unsupported args");
             }
+        }
+
+        private static Boolean ShowAnalyzerInfo()
+        {
+            IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(new NullOutput(), Array.Empty<AnalyzerEntry>());
+            Console.WriteLine("Known analyzers:");
+            foreach (IFileAnalyzer analyzer in analyzers)
+            {
+                Console.WriteLine();
+                AnalyzerInfo analyzerInfo = analyzer.AnalyzerInfo;
+                Console.WriteLine($"Name: {analyzerInfo.Name}");
+                Console.WriteLine(analyzerInfo.Description);
+            }
+            return true;
+        }
+
+        private static Boolean ProcessCheck(AppArgsResult.MainConfig mainConfig)
+        {
+            AppConfig appConfig = AppConfigFactory.Create(mainConfig);
+            IOutput output = new OutputImpl(Console.Out, Console.Error, appConfig.Config.BaseConfig!.OutputLevel);
+            PrerequisitesManager.Run();
+            ISourceProcessor processor = SourceProcessorFactory.Create(appConfig.Config.BaseConfig.Source!, output);
+            IList<IFileAnalyzer> analyzers = AnalyzersFactory.Create(output, appConfig.Config.Analyzers ?? Array.Empty<AnalyzerEntry>());
+            Boolean processResult = processor.Process(analyzers);
+            output.WriteInfoLine($"Result of analysis: analysis is {(processResult ? "succeeded" : "failed")}");
+            return processResult;
         }
     }
 }

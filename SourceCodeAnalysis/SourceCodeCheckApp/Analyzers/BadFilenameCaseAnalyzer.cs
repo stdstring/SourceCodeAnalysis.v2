@@ -10,6 +10,11 @@ namespace SourceCodeCheckApp.Analyzers
     {
         public const String Name = "SourceCodeCheckApp.Analyzers.BadFilenameCaseAnalyzer";
 
+        public const String Description = "This analyzer checks if file has the type with name that match the filename without extension. " +
+                                          "If there is no such type, but there are types with names which mismatch by letter case only, than such situation are considered as error. " +
+                                          "If file contains type, which matches by name and types which mismatch by letter case only, than such situation are considered as warning. " +
+                                          "If file contains only types which mismatch by name, than such situation are considered as warning.";
+
         public BadFilenameCaseAnalyzer(IOutput output, AnalyzerState analyzerState)
         {
             _output = new AnalyserOutputWrapper(output, analyzerState);
@@ -20,21 +25,23 @@ namespace SourceCodeCheckApp.Analyzers
         {
             if (_analyzerState == AnalyzerState.Off)
                 return true;
-            _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer started");
+            _output.WriteInfoLine($"Execution of {Name} started");
             TopLevelTypeNamesCollector collector = new TopLevelTypeNamesCollector(model);
             collector.Visit(tree.GetRoot());
             Boolean result = Process(filePath, collector.Data);
-            _output.WriteInfoLine($"Execution of BadFilenameCaseAnalyzer finished");
+            _output.WriteInfoLine($"Execution of {Name} finished");
             return (_analyzerState != AnalyzerState.On) || result;
         }
 
-        private Boolean Process(String filePath, IList<AnalyzerData<TypeData>> data)
+        public AnalyzerInfo AnalyzerInfo { get; } = new AnalyzerInfo(Name, Description);
+
+        private Boolean Process(String filePath, IList<AnalyzerData<SimpleTypeData>> data)
         {
             String filename = Path.GetFileName(filePath);
             String expectedTypeName = Path.GetFileNameWithoutExtension(filePath);
-            IList<AnalyzerData<TypeData>> typeWrongNameCaseList = new List<AnalyzerData<TypeData>>();
+            IList<AnalyzerData<SimpleTypeData>> typeWrongNameCaseList = new List<AnalyzerData<SimpleTypeData>>();
             Boolean exactMatch = false;
-            foreach (AnalyzerData<TypeData> item in data)
+            foreach (AnalyzerData<SimpleTypeData> item in data)
             {
                 (Boolean exactMatch, Boolean isWrongNameCase) typeResult = Process(expectedTypeName, item);
                 exactMatch |= typeResult.exactMatch;
@@ -49,35 +56,25 @@ namespace SourceCodeCheckApp.Analyzers
             if (!exactMatch && typeWrongNameCaseList.Count > 0)
             {
                 _output.WriteInfoLine($"File doesn't contain any type with name exact match to the filename, but contains {typeWrongNameCaseList.Count} types with names match to the filename with ignoring case");
-                foreach (AnalyzerData<TypeData> typeWrongNameCase in typeWrongNameCaseList)
+                foreach (AnalyzerData<SimpleTypeData> typeWrongNameCase in typeWrongNameCaseList)
                     _output.WriteErrorLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data.FullName}\" which corresponds the filename \"{filename}\" only at ignoring case");
                 return false;
             }
             _output.WriteInfoLine($"File contains {typeWrongNameCaseList.Count} types with names match to the filename with ignoring case");
-            foreach (AnalyzerData<TypeData> typeWrongNameCase in typeWrongNameCaseList)
+            foreach (AnalyzerData<SimpleTypeData> typeWrongNameCase in typeWrongNameCaseList)
                 _output.WriteWarningLine(filePath, typeWrongNameCase.StartPosition.Line, $"Found type named \"{typeWrongNameCase.Data.FullName}\" which corresponds the filename \"{filename}\" only at ignoring case");
             return true;
         }
 
-        private (Boolean exactMatch, Boolean isWrongNameCase) Process(String expectedTypeName, AnalyzerData<TypeData> entry)
+        private (Boolean exactMatch, Boolean isWrongNameCase) Process(String expectedTypeName, AnalyzerData<SimpleTypeData> entry)
         {
-            switch (entry.Data)
-            {
-                case TypeData.ArrayType:
-                    throw new InvalidOperationException($"Unexpected type {entry.Data.FullName} at {entry.StartPosition.Line}");
-                case TypeData.UsualType{TypeName: var actualTypeName}:
-                {
-                    Boolean exactMatch = false;
-                    Boolean isWrongNameCase = false;
-                    if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCulture))
-                        exactMatch = true;
-                    else if (String.Equals(expectedTypeName, actualTypeName, StringComparison.InvariantCultureIgnoreCase))
-                        isWrongNameCase = true;
-                    return (exactMatch, isWrongNameCase);
-                }
-                default:
-                    throw new InvalidOperationException("Unexpected control flow");
-            }
+            Boolean exactMatch = false;
+            Boolean isWrongNameCase = false;
+            if (String.Equals(expectedTypeName, entry.Data.TypeName, StringComparison.InvariantCulture))
+                exactMatch = true;
+            else if (String.Equals(expectedTypeName, entry.Data.TypeName, StringComparison.InvariantCultureIgnoreCase))
+                isWrongNameCase = true;
+            return (exactMatch, isWrongNameCase);
         }
 
         private readonly IOutput _output;
@@ -115,11 +112,14 @@ namespace SourceCodeCheckApp.Analyzers
                 if (type == null)
                     throw new InvalidOperationException();
                 FileLinePositionSpan span = node.SyntaxTree.GetLineSpan(node.Span);
-                if (type.ContainingType == null)
-                    Data.Add(new AnalyzerData<TypeData>(TypeData.Create(type), span));
+                if (type.ContainingType != null)
+                    return;
+                if (String.IsNullOrEmpty(type.Name))
+                    throw new InvalidOperationException("Bad type declaration");
+                Data.Add(new AnalyzerData<SimpleTypeData>(new SimpleTypeData(type.Name, type.ToDisplayString()), span));
             }
 
-            public IList<AnalyzerData<TypeData>> Data { get; } = new List<AnalyzerData<TypeData>>();
+            public IList<AnalyzerData<SimpleTypeData>> Data { get; } = new List<AnalyzerData<SimpleTypeData>>();
 
             private readonly SemanticModel _model;
         }

@@ -58,7 +58,7 @@ namespace SourceCodeCheckApp.Processors
 
         private Boolean ProcessFile(String filename, SyntaxTree tree, SemanticModel model, IList<IFileAnalyzer> analyzers)
         {
-            FileProcessor fileProcessor = new FileProcessor(filename, _output);
+            FileProcessor fileProcessor = new FileProcessor(filename);
             return fileProcessor.Process(tree, model, analyzers);
         }
 

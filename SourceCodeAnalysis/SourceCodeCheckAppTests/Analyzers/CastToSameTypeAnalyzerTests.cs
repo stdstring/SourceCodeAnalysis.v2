@@ -24,8 +24,8 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "{0}(8): [ERROR]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}(9): [ERROR]: Found cast to the same type \"System.String\"\r\n";
+            const String expectedOutputTemplate = "{0}(8): [ERROR]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}(9): [ERROR]: Found cast to the same type \"string\"\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "CastToSameType", FilePath, OutputLevel.Error);
             analyzerHelper.Process(_analyzerOnFactory, false, expectedOutput);
@@ -48,8 +48,8 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "{0}(8): [{1}]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}(9): [{1}]: Found cast to the same type \"System.String\"\r\n";
+            const String expectedOutputTemplate = "{0}(8): [{1}]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}(9): [{1}]: Found cast to the same type \"string\"\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "CastToSameType", FilePath, OutputLevel.Warning);
@@ -73,12 +73,12 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}";
-            const String expectedOutputTemplate = "Execution of CastToSameTypeAnalyzer started\r\n" +
-                                                  "Found 2 casts leading to errors in the ported C++ code\r\n" +
-                                                  "{0}(8): [{1}]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "{0}(9): [{1}]: Found cast to the same type \"System.String\"\r\n" +
-                                                  "Found 0 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "Execution of CastToSameTypeAnalyzer finished\r\n";
+            const String expectedOutputTemplate = $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
+                                                  "Found 2 casts to the same type leading to errors\r\n" +
+                                                  "{0}(8): [{1}]: Found cast to the same type \"string\"\r\n" +
+                                                  "{0}(9): [{1}]: Found cast to the same type \"string\"\r\n" +
+                                                  "Found 0 casts to the same type not leading to errors\r\n" +
+                                                  $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n";
             String expectedOnOutput = String.Format(expectedOutputTemplate, FilePath, "ERROR");
             String expectedWarningOutput = String.Format(expectedOutputTemplate, FilePath, "WARNING");
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "CastToSameType", FilePath, OutputLevel.Info);
@@ -147,10 +147,10 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}\r\n";
-            const String expectedOutputTemplate = "{0}(14): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
-                                                  "{0}(15): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
-                                                  "{0}(17): [WARNING]: Found cast to the same type \"System.Double\"\r\n" +
-                                                  "{0}(19): [WARNING]: Found cast to the same type \"System.Object\"\r\n" +
+            const String expectedOutputTemplate = "{0}(14): [WARNING]: Found cast to the same type \"int\"\r\n" +
+                                                  "{0}(15): [WARNING]: Found cast to the same type \"int\"\r\n" +
+                                                  "{0}(17): [WARNING]: Found cast to the same type \"double\"\r\n" +
+                                                  "{0}(19): [WARNING]: Found cast to the same type \"object\"\r\n" +
                                                   "{0}(21): [WARNING]: Found cast to the same type \"SomeNamespace.SomeDerivedClass\"\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "CastToSameType", FilePath, OutputLevel.Warning);
@@ -186,15 +186,15 @@ namespace SourceCodeCheckAppTests.Analyzers
                                   "        }\r\n" +
                                   "    }\r\n" +
                                   "}\r\n";
-            const String expectedOutputTemplate = "Execution of CastToSameTypeAnalyzer started\r\n" +
-                                                  "Found 0 casts leading to errors in the ported C++ code\r\n" +
-                                                  "Found 5 casts to the same type not leading to errors in the ported C++ code\r\n" +
-                                                  "{0}(14): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
-                                                  "{0}(15): [WARNING]: Found cast to the same type \"System.Int32\"\r\n" +
-                                                  "{0}(17): [WARNING]: Found cast to the same type \"System.Double\"\r\n" +
-                                                  "{0}(19): [WARNING]: Found cast to the same type \"System.Object\"\r\n" +
+            const String expectedOutputTemplate = $"Execution of {CastToSameTypeAnalyzer.Name} started\r\n" +
+                                                  "Found 0 casts to the same type leading to errors\r\n" +
+                                                  "Found 5 casts to the same type not leading to errors\r\n" +
+                                                  "{0}(14): [WARNING]: Found cast to the same type \"int\"\r\n" +
+                                                  "{0}(15): [WARNING]: Found cast to the same type \"int\"\r\n" +
+                                                  "{0}(17): [WARNING]: Found cast to the same type \"double\"\r\n" +
+                                                  "{0}(19): [WARNING]: Found cast to the same type \"object\"\r\n" +
                                                   "{0}(21): [WARNING]: Found cast to the same type \"SomeNamespace.SomeDerivedClass\"\r\n" +
-                                                  "Execution of CastToSameTypeAnalyzer finished\r\n";
+                                                  $"Execution of {CastToSameTypeAnalyzer.Name} finished\r\n";
             String expectedOutput = String.Format(expectedOutputTemplate, FilePath);
             AnalyzerHelper analyzerHelper = new AnalyzerHelper(source, "CastToSameType", FilePath, OutputLevel.Info);
             analyzerHelper.Process(_analyzerOnFactory, true, expectedOutput);
@@ -312,6 +312,16 @@ namespace SourceCodeCheckAppTests.Analyzers
             analyzerHelper.Process(_analyzerOnFactory, true, SourceCodeCheckAppOutputDef.CastToSameTypeAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerWarningFactory, true, SourceCodeCheckAppOutputDef.CastToSameTypeAnalyzerSuccessOutput);
             analyzerHelper.Process(_analyzerOffFactory, true, "");
+        }
+
+        [Test]
+        public void CheckAnalyzerInfo()
+        {
+            AnalyzerInfo expectedInfo = new AnalyzerInfo(CastToSameTypeAnalyzer.Name, CastToSameTypeAnalyzer.Description);
+            IOutput nullOutput = new NullOutput();
+            Assert.That(_analyzerOnFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerWarningFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
+            Assert.That(_analyzerOffFactory(nullOutput).AnalyzerInfo, Is.EqualTo(expectedInfo));
         }
 
         private readonly Func<IOutput, IFileAnalyzer> _analyzerOnFactory = output => new CastToSameTypeAnalyzer(output, AnalyzerState.On);
